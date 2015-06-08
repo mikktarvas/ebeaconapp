@@ -1,0 +1,6 @@
+function BeaconService() {
+
+}
+
+BeaconService.prototype = {
+};
