@@ -1,10 +1,28 @@
 function App() {
 
+    this._beaconService = new BeaconService();
+    this._foundBeacons = {};
+
 }
 
 App.prototype = {
     run: function () {
+
         console.info("application run");
+        this._beaconService.on("beacons:found", function (beacons) {
+            beacons.forEach(function (beacon) {
+                var id = beacon.getUniqueId();
+                if (!this._foundBeacons.hasOwnProperty(id)) {
+                    this._foundUniqueBeacon(beacon);
+                }
+            }, this);
+        }, this);
+
+    },
+    _foundUniqueBeacon: function (beacon) {
+        var id = beacon.getUniqueId();
+        this._foundBeacons[id] = beacon;
+        console.info("found unique beacon", beacon, "id", id);
     }
 };
 
