@@ -1,5 +1,5 @@
 function BeaconService() {
-    var that = this;
+
     _.extend(this, Backbone.Events);
     if (!!window.cordova) {
         estimote.beacons.startRangingBeaconsInRegion({}, this._onRanging.bind(this), this._onRangingError.bind(this));
@@ -7,7 +7,7 @@ function BeaconService() {
         console.log("not in Cordova context, bluetooth not available");
     }
 
-    this.beaconDistanceThreshold = 2; //In meters
+    this.beaconDistanceRadius = 2; //In meters
 
 }
 
@@ -19,7 +19,7 @@ BeaconService.prototype = {
         });
 
         beacons = beacons.filter(function (beacon) {
-            return beacon.distance <= this.beaconDistanceThreshold;
+            return beacon.distance <= this.beaconDistanceRadius;
         }, this);
 
         this.trigger("beacons:found", beacons);
