@@ -25,9 +25,16 @@
         },
         _registerListeners: function () {
 
+            var that = this;
             this._beaconService.on("beacons:found", this._onBeaconsFound.bind(this));
             this._model.on("question:added", this._questionAdded.bind(this));
             this._model.on("current_id:changed", this._currentIdChanged.bind(this));
+            $(document).on("tap", "#leftarrow", function () {
+                that.previousQuestion();
+            });
+            $(document).on("tap", "#rightarrow", function () {
+                that.nextQuestion();
+            });
 
         },
         _onBeaconsFound: function (beacons) {
@@ -89,6 +96,9 @@
         },
         nextQuestion: function () {
             var questions = this._model.questions;
+            if (questions.length === 0) {
+                return;
+            }
             var offset = this._model.getCurrentQuestionOffset() + 1;
             if (offset >= questions.length) {
                 offset = 0;
@@ -97,6 +107,9 @@
         },
         previousQuestion: function () {
             var questions = this._model.questions;
+            if (questions.length === 0) {
+                return;
+            }
             var offset = this._model.getCurrentQuestionOffset() - 1;
             if (offset < 0) {
                 offset = questions.length - 1;
