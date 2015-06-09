@@ -34,6 +34,21 @@
                 error: this._defaultErrorHandler.bind(this)
             });
         },
+        answerQuestion: function (questionId, answerId, clbk) {
+            $.ajax({
+                url: API_HOST + "answer_question.php",
+                dataType: "json",
+                method: "POST",
+                data: {
+                    question_id: questionId,
+                    answer_id: answerId
+                },
+                success: function (response) {
+                    clbk(response.added_points);
+                },
+                error: this._defaultErrorHandler.bind(this)
+            });
+        },
         startGame: function (clbk) {
             $.ajax({
                 url: API_HOST + "startgame.php",
@@ -41,20 +56,21 @@
                 dataType: "json",
                 method: "POST",
                 data: {},
-                success: function (response) {
+                success: function () {
                     clbk();
                 },
                 error: this._defaultErrorHandler.bind(this)
             });
         },
-        endGame: function (name, clbk) {
+        endGame: function (name, profession, clbk) {
             $.ajax({
-                url: API_HOST + "startgame.php",
+                url: API_HOST + "endgame.php",
                 contentType: "application/json",
                 dataType: "json",
                 method: "POST",
                 data: {
-                    name: name
+                    name: name,
+                    profession: profession
                 },
                 success: function (response) {
                     clbk();
