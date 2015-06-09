@@ -38,11 +38,12 @@
         },
         _foundUniqueBeacon: function (beacon) {
 
+            var that = this;
             var id = beacon.getUniqueId();
             console.info("found unique beacon", beacon, "id", id);
             this._foundBeacons[id] = beacon;
-            this._api.getQuestion(id, function () {
-                console.dir(arguments);
+            this._api.getQuestion(id, function (question) {
+                that._model.addQuestion(question);
             });
 
         }
