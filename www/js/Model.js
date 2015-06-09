@@ -29,7 +29,7 @@
             } else {
                 for (var i = 0; i < this.questions.length; i++) {
                     if (this._currentId === this.questions[i].id) {
-                        return i + 1;
+                        return i;
                     }
                 }
                 return -1;

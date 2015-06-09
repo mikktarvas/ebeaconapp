@@ -42,7 +42,7 @@
             this._updateMarker();
         },
         _updateMarker: function () {
-            var offset = this._model.getCurrentQuestionOffset();
+            var offset = this._model.getCurrentQuestionOffset() + 1;
             var total = this._model.questions.length;
             var placheholder = offset + "/" + total;
             $("#page").html(placheholder);
@@ -86,6 +86,22 @@
                         .html(answer.text);
                 $button.appendTo($answers);
             });
+        },
+        nextQuestion: function () {
+            var questions = this._model.questions;
+            var offset = this._model.getCurrentQuestionOffset() + 1;
+            if (offset >= questions.length) {
+                offset = 0;
+            }
+            this.displayQuestion(questions[offset].id);
+        },
+        previousQuestion: function () {
+            var questions = this._model.questions;
+            var offset = this._model.getCurrentQuestionOffset() - 1;
+            if (offset < 0) {
+                offset = questions.length - 1;
+            }
+            this.displayQuestion(questions[offset].id);
         }
     };
 
@@ -108,6 +124,7 @@
 
         var app = new App();
         app.run();
+        window._app = app;
 
     });
 
