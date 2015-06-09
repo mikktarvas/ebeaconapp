@@ -12,17 +12,12 @@
         <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
         <title>index</title>
     </head>
+	
     <body>
-
-        <div class="row-fluid">
-            <i class="fa fa-caret-left"></i>
-            <i class="fa fa-caret-right"></i>
-        </div>
-
+		<!--   Loading screen -->
         <div id="loading-screen-wrapper">
             <div id="loading-screen">
                 Loading
-				
             </div>
         </div>
 
@@ -40,18 +35,22 @@
         <script type="text/javascript" src="js/BeaconsService.js"></script>
         <script type="text/javascript" src="js/App.js"></script>
 		
+		<!-- Answer buttons and question -->
+		<section id="question_and_answer">
 		
-		<section>
-		
-		<h2>Küsimus siin</h2>
-			<a href="#" class="btn btn-block btn-lg btn-info">Esimene</a>
-			</br>
-			<a href="#" class="btn btn-block btn-lg btn-info">Teine</a>
-			</br>
-			<a href="#" class="btn btn-block btn-lg btn-info">Kolmas</a>
+			<h2 id="question">{QUESTION}</h2>
+                        
+                        <span id="answers">
+                            {ANSWERS}
+                        </span>
+			
+			<!--<a href="#" class="btn btn-block btn-lg btn-info">Esimene</a>
+				</br>
+			<a href="#" class="">Teine</a>
+				</br>
+			<a href="#" class="btn btn-block btn-lg btn-info">Kolmas</a>-->
 		</section>	
 
-		
-
+	
     </body>
 </html>

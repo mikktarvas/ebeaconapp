@@ -46,6 +46,29 @@
                 that._model.addQuestion(question);
             });
 
+            this.displayQuestion(id);
+
+        },
+        displayQuestion: function (questionId) {
+            var questions = this._model.questions.filter(function (question) {
+                return question.id = questionId;
+            });
+            if (questions.length !== 1) {
+                throw new Error("invalid question id:", questionId);
+            }
+            var question = questions[0];
+
+            $("#question").html(question.text);
+            var $answers = $("#answers").empty();
+            question.answers.forEach(function (answer) {
+                var $button =
+                        $("<a>")
+                        .attr({
+                            class: "btn btn-block btn-lg btn-info"
+                        })
+                        .html(answer.text);
+                $button.appendTo($answers);
+            });
         }
     };
 
