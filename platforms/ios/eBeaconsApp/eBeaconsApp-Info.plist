@@ -187,5 +187,9 @@
       <string>bluetooth-central</string>
       <string>bluetooth-peripheral</string>
     </array>
+    <key>UIStatusBarHidden</key>
+    <true/>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
   </dict>
 </plist>

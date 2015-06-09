@@ -5,5 +5,12 @@
             "url": "https://github.com/evothings/phonegap-estimotebeacons.git",
             "subdir": "."
         }
+    },
+    "de.appplant.cordova.plugin.hidden-statusbar-overlay": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/katzer/cordova-plugin-hidden-statusbar-overlay",
+            "subdir": "."
+        }
     }
 }
