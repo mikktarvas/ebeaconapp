@@ -5,6 +5,7 @@
 
         this._beaconService = new BeaconService();
         this._api = new Api();
+        this._model = new Model();
         this._foundBeacons = {};
 
     }
@@ -14,6 +15,12 @@
 
             console.info("application run");
             this._registerListeners();
+
+            this._api.startGame(function () {
+                setTimeout(function () {
+                    $("#loading-screen-wrapper").hide();
+                }, 1000);
+            });
 
         },
         _registerListeners: function () {
@@ -28,13 +35,15 @@
                     this._foundUniqueBeacon(beacon);
                 }
             }, this);
-
         },
         _foundUniqueBeacon: function (beacon) {
 
             var id = beacon.getUniqueId();
             console.info("found unique beacon", beacon, "id", id);
             this._foundBeacons[id] = beacon;
+            this._api.getQuestion(id, function () {
+                console.dir(arguments);
+            });
 
         }
     };

@@ -1,3 +1,26 @@
 html, body {
     background: #fff;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-color:rgba(255,255,255, 0.2);
+    -webkit-text-stroke-width: 1px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#loading-screen-wrapper {
+    background: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#loading-screen {
+    font-size: 1.3em;
+    width: 100%;
+    top: 50%;
+    position: absolute;
+    text-align: center;
 }

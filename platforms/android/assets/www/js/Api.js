@@ -1,6 +1,6 @@
 (function (window, $, console) {
     "use strict";
-    
+
     var API_HOST = "http://beacons.hol.es/";
 
     function Api() {
@@ -14,14 +14,22 @@
         getQuestion: function (deviceId, clbk) {
             $.ajax({
                 url: API_HOST + "get_question.php",
-                contentType: "application/json",
                 dataType: "json",
                 method: "POST",
                 data: {
                     uuid_ma_mi: deviceId
                 },
                 success: function (response) {
-                    clbk();
+                    var question = new Question(
+                            response.question.id,
+                            response.question.text,
+                            response.question.point_scale
+                            );
+                    var answers = response.answers.map(function (e) {
+                        return new Answer(e.id, e.text);
+                    });
+                    question.answers = answers;
+                    clbk(question);
                 },
                 error: this._defaultErrorHandler.bind(this)
             });

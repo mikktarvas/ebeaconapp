@@ -6,9 +6,6 @@
     }
 
     Model.prototype = {
-        addQuestion: function (question) {
-            this._questions.push(question);
-        }
     };
 
     window.Model = Model;

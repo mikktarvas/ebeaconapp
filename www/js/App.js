@@ -16,6 +16,12 @@
             console.info("application run");
             this._registerListeners();
 
+            this._api.startGame(function () {
+                setTimeout(function () {
+                    $("#loading-screen-wrapper").hide();
+                }, 1000);
+            });
+
         },
         _registerListeners: function () {
 
@@ -32,9 +38,13 @@
         },
         _foundUniqueBeacon: function (beacon) {
 
+            var that = this;
             var id = beacon.getUniqueId();
             console.info("found unique beacon", beacon, "id", id);
             this._foundBeacons[id] = beacon;
+            this._api.getQuestion(id, function (question) {
+                that._model.addQuestion(question);
+            });
 
         }
     };
