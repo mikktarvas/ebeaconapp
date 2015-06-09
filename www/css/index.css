@@ -4,6 +4,7 @@ html, body {
     -webkit-text-stroke-color:rgba(255,255,255, 0.2);
     -webkit-text-stroke-width: 1px;
     width: 100%;
+	height: 100%;
     margin: 0;
     padding: 0;
 }
@@ -24,3 +25,26 @@ html, body {
     position: absolute;
     text-align: center;
 }
+
+body{
+	text-align: justify;
+	background:url("estimote.jpg");
+	background-size:500%;
+}
+section{
+	background-color:rgba(255,255,255, 0.6);
+	margin-top:20px;
+	margin-left: 50px;
+	margin-right: 50px;
+	text-align: center;
+	padding:10px;
+	padding-bottom: 30px;
+	border: 5px solid white;
+	border-radius:30px;
+}
+
+h2{
+margin-top: 20px;
+margin-bottom: 100px;
+}
+
