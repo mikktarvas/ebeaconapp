@@ -3,7 +3,7 @@
     function Model() {
         _.extend(this, Backbone.Events);
         this.questions = [];
-        this.currentId = null;
+        this._currentId = null;
     }
 
     Model.prototype = {
@@ -19,13 +19,17 @@
         getUnansweredCount: function () {
             return this.questions.length - this.getAnsweredCount();
         },
-        getCurrentQuestinOffset: function () {
+        setCurrentId: function (id) {
+            this._currentId = id;
+            this.trigger("current_id:changed", id);
+        },
+        getCurrentQuestionOffset: function () {
             if (this.currentId === null) {
                 return -1;
             } else {
                 for (var i = 0; i < this.questions.length; i++) {
-                    if (this.currentId === this.questions[i].id) {
-                        return i;
+                    if (this._currentId === this.questions[i].id) {
+                        return i + 1;
                     }
                 }
                 return -1;

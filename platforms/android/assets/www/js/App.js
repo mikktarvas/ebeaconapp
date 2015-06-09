@@ -27,6 +27,7 @@
 
             this._beaconService.on("beacons:found", this._onBeaconsFound.bind(this));
             this._model.on("question:added", this._questionAdded.bind(this));
+            this._model.on("current_id:changed", this._currentIdChanged.bind(this));
 
         },
         _onBeaconsFound: function (beacons) {
@@ -36,6 +37,15 @@
                     this._foundUniqueBeacon(beacon);
                 }
             }, this);
+        },
+        _currentIdChanged: function () {
+            this._updateMarker();
+        },
+        _updateMarker: function () {
+            var offset = this._model.getCurrentQuestionOffset();
+            var total = this._model.questions.length;
+            var placheholder = offset + "/" + total;
+            $("#page").html(placheholder);
         },
         _foundUniqueBeacon: function (beacon) {
 
@@ -49,10 +59,11 @@
 
         },
         _questionAdded: function (question) {
-            
-            if (this._model.currentId === null) {
+
+            if (this._model._currentId === null) {
                 this.displayQuestion(question.id);
             }
+            this._updateMarker();
         },
         displayQuestion: function (questionId) {
             var questions = this._model.questions.filter(function (question) {
@@ -62,7 +73,7 @@
                 throw new Error("invalid question id:", questionId);
             }
             var question = questions[0];
-            this._model.currentId = question.id;
+            this._model.setCurrentId(question.id);
 
             $("#question").html(question.text);
             var $answers = $("#answers").empty();
