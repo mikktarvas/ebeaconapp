@@ -3,6 +3,7 @@
     function Model() {
         _.extend(this, Backbone.Events);
         this.questions = [];
+        this.currentId = null;
     }
 
     Model.prototype = {

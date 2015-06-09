@@ -3,6 +3,7 @@
     function Model() {
         _.extend(this, Backbone.Events);
         this.questions = [];
+        this.currentId = null;
     }
 
     Model.prototype = {
@@ -17,6 +18,18 @@
         },
         getUnansweredCount: function () {
             return this.questions.length - this.getAnsweredCount();
+        },
+        getCurrentQuestinOffset: function () {
+            if (this.currentId === null) {
+                return -1;
+            } else {
+                for (var i = 0; i < this.questions.length; i++) {
+                    if (this.currentId === this.questions[i].id) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
         }
     };
 

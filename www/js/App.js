@@ -26,6 +26,7 @@
         _registerListeners: function () {
 
             this._beaconService.on("beacons:found", this._onBeaconsFound.bind(this));
+            this._model.on("question:added", this._questionAdded.bind(this));
 
         },
         _onBeaconsFound: function (beacons) {
@@ -46,17 +47,22 @@
                 that._model.addQuestion(question);
             });
 
-            this.displayQuestion(id);
-
+        },
+        _questionAdded: function (question) {
+            
+            if (this._model.currentId === null) {
+                this.displayQuestion(question.id);
+            }
         },
         displayQuestion: function (questionId) {
             var questions = this._model.questions.filter(function (question) {
-                return question.id = questionId;
+                return question.id === questionId;
             });
             if (questions.length !== 1) {
                 throw new Error("invalid question id:", questionId);
             }
             var question = questions[0];
+            this._model.currentId = question.id;
 
             $("#question").html(question.text);
             var $answers = $("#answers").empty();
