@@ -34,9 +34,29 @@
             $(document).on("click", "#rightarrow", this.nextQuestion.bind(this));
             $(document).on("click", "#submit-score", this._tapSubmitScore.bind(this));
             $(document).on("click", "#finish", this._tapFinish.bind(this));
+            $(document).on("click", "#close-leaderboard", this._closeLeaderBoard.bind(this));
+            $(document).on("click", "#start-game", this._startGame.bind(this));
             $("html").on("swipeleft", this.nextQuestion.bind(this));
             $("html").on("swiperight", this.previousQuestion.bind(this));
 
+        },
+        _startNewGame: function () {
+            this._model.clear();
+            this._foundBeacons = {};
+        },
+        _startGame: function () {
+            var that = this;
+            this._api.startGame(function () {
+                $('#endgame-modal').modal("hide");
+                that._startNewGame();
+            });
+        },
+        _closeLeaderBoard: function () {
+            var that = this;
+            this._api.startGame(function () {
+                $("#leaderboard-modal").modal("show");
+                that._startNewGame();
+            });
         },
         _tapFinish: function () {
             $('#endgame-modal').modal("show");

@@ -8,11 +8,18 @@
     }
 
     Model.prototype = {
+        clear: function () {
+            this.questions.length = 0;
+            this.setCurrentId(null);
+            this._score = 0;
+            this.trigger("score:changed", 0);
+            this.trigger("current_id:changed", null);
+        },
         incementScore: function (toAdd) {
             this._score += toAdd;
             this.trigger("score:changed", this._score);
         },
-        getScore: function() {
+        getScore: function () {
             return this._score;
         },
         addQuestion: function (question) {
