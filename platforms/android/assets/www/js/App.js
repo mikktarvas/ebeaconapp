@@ -57,6 +57,17 @@
                 $e.removeClass("animated bounce").addClass("animated bounce").one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
                     $e.removeClass("animated bounce");
                 });
+            } else {
+                this._api.endGame(true, data.name, data.profession, function (leaderboard) {
+                    $('#endgame-modal').modal("hide");
+                    $("#leaderboard-modal").modal("show");
+                    var $lb = $("#leaderboard").empty();
+
+                    leaderboard.forEach(function (e) {
+                        var toAppend = '<a class="list-group-item"><h4 class="list-group-item-heading">' + e.name + ': ' + e.score + '</h4></a>';
+                        $lb.append(toAppend);
+                    });
+                });
             }
 
         },

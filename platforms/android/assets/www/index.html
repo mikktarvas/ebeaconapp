@@ -49,11 +49,10 @@
             <span id="answers"></span>
             <div id="question_and_answer">
 
-                <div class="modal fade" id="endgame-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" id="endgame-modal" tabindex="-1" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
                                 <h4 class="modal-title" id="myModalLabel">End game</h4>
                             </div>
                             <div class="modal-body">
@@ -88,11 +87,10 @@
             </div>
         </section>
 
-        <div class="modal fade" id="endgame-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="endgame-modal" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
                         <h4 class="modal-title" id="myModalLabel">End game</h4>
                     </div>
                     <div class="modal-body">
@@ -120,6 +118,26 @@
                         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" id="start-game">Start a new game</button>
                         <button type="button" class="btn btn-primary" id="submit-score">Submit score</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="leaderboard-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Leaderboard</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="list-group" id="leaderboard">
+                            
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="text-align: center;">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

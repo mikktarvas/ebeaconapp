@@ -60,7 +60,6 @@
         startGame: function (clbk) {
             $.ajax({
                 url: API_HOST + "startgame.php",
-                contentType: "application/json",
                 dataType: "json",
                 method: "POST",
                 data: {},
@@ -70,19 +69,24 @@
                 error: this._defaultErrorHandler.bind(this)
             });
         },
-        endGame: function (name, profession, clbk) {
-            //name, profession
-            $.ajax({
-                url: API_HOST + "endgame.php",
-                contentType: "application/json",
-                dataType: "json",
-                method: "POST",
-                data: {
+        endGame: function (submitScore, name, profession, clbk) {
+
+            var data = {};
+
+            if (submitScore) {
+                data = {
                     name: name,
                     profession: profession
-                },
+                };
+            }
+
+            $.ajax({
+                url: API_HOST + "endgame.php",
+                dataType: "json",
+                method: "POST",
+                data: data,
                 success: function (response) {
-                    clbk();
+                    clbk(response);
                 },
                 error: this._defaultErrorHandler.bind(this)
             });
