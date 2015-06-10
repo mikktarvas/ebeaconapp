@@ -4,9 +4,17 @@
         _.extend(this, Backbone.Events);
         this.questions = [];
         this._currentId = null;
+        this._score = 0;
     }
 
     Model.prototype = {
+        incementScore: function (toAdd) {
+            this._score += toAdd;
+            this.trigger("score:changed", this._score);
+        },
+        getScore: function() {
+            return this._score;
+        },
         addQuestion: function (question) {
             this.questions.push(question);
             this.trigger("question:added", question);

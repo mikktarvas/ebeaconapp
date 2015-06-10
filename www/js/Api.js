@@ -34,17 +34,18 @@
                 error: this._defaultErrorHandler.bind(this)
             });
         },
-        answerQuestion: function (questionId, answerId, clbk) {
+        answerQuestion: function (questionId, answerId, answerIds, clbk) {
             $.ajax({
                 url: API_HOST + "answer_question.php",
                 dataType: "json",
                 method: "POST",
                 data: {
                     question_id: questionId,
-                    answer_id: answerId
+                    answer_id: answerId,
+                    answer_ids: answerIds
                 },
                 success: function (response) {
-                    clbk(response.added_points);
+                    clbk(response.added_points, response.correct_id);
                 },
                 error: this._defaultErrorHandler.bind(this)
             });

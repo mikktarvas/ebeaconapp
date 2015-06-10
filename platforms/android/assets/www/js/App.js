@@ -1,4 +1,4 @@
-(function (window, $, console) {
+(function (window, $, console, _) {
     "use strict";
 
     function App() {
@@ -15,6 +15,7 @@
 
             console.info("application run");
             this._registerListeners();
+            this._scoreChanged(0);
 
             this._api.startGame(function () {
                 setTimeout(function () {
@@ -25,17 +26,16 @@
         },
         _registerListeners: function () {
 
-            var that = this;
             this._beaconService.on("beacons:found", this._onBeaconsFound.bind(this));
             this._model.on("question:added", this._questionAdded.bind(this));
+            this._model.on("score:changed", this._scoreChanged.bind(this));
             this._model.on("current_id:changed", this._currentIdChanged.bind(this));
-            $(document).on("tap", "#leftarrow", function () {
-                that.previousQuestion();
-            });
-            $(document).on("tap", "#rightarrow", function () {
-                that.nextQuestion();
-            });
+            $(document).on("tap", "#leftarrow", this.previousQuestion.bind(this));
+            $(document).on("tap", "#rightarrow", this.nextQuestion.bind(this));
 
+        },
+        _scoreChanged: function (newScore) {
+            $("#score").html(newScore);
         },
         _onBeaconsFound: function (beacons) {
             beacons.forEach(function (beacon) {
@@ -72,29 +72,80 @@
             }
             this._updateMarker();
         },
+        _answerQuestion: function (questionId, answerId, answerIds, clbk) {
+
+            var that = this;
+
+            this._api.answerQuestion(questionId, answerId, answerIds, function (addedPoints, correctId) {
+
+                var correct = addedPoints !== 0 && answerId === correctId;
+                if (correct) {
+                    that._model.incementScore(addedPoints);
+                }
+
+                (clbk || _.noop)(addedPoints, correctId);
+
+            });
+
+        },
         displayQuestion: function (questionId) {
+
+            var that = this;
+            var answerIds = [];
+
             var questions = this._model.questions.filter(function (question) {
                 return question.id === questionId;
             });
+
             if (questions.length !== 1) {
                 throw new Error("invalid question id:", questionId);
             }
+
             var question = questions[0];
             this._model.setCurrentId(question.id);
 
             $("#question").html(question.text);
             var $answers = $("#answers").empty();
             question.answers.forEach(function (answer) {
+
+                var content = "<i class=\"fa fa-check\"></i>" + answer.text;
+
                 var $button =
-                        $("<a>")
+                        $("<button>")
                         .attr({
-                            class: "btn btn-block btn-lg btn-info"
+                            class: "btn btn-block btn-lg btn-info answer"
                         })
-                        .html(answer.text);
-                $button.appendTo($answers);
+                        .prop("disabled", question.isAnswered)
+                        .html(content)
+                        .appendTo($answers);
+
+                if (!question.isAnswered) {
+                    $button.on("tap", function () {
+                        question.isAnswered = true;
+                        question.answerId = answer.id;
+                        $("#answers button").prop("disabled", true);
+                        that._answerQuestion(questionId, answer.id, answerIds, function (addedPoints, correctId) {
+                            question.correctAnswerId = correctId;
+                            that.displayQuestion(questionId);
+                        });
+                    });
+                } else {
+                    var correct = question.isCorrect();
+                    if (correct && answer.id === question.answerId) {
+                        $button.addClass("green-border");
+                    } else if (!correct && answer.id === question.answerId) {
+                        $button.addClass("red-border");
+                    } else if (!correct && answer.id === question.correctAnswerId) {
+                        $button.find(".fa").show();
+                    }
+                }
+
+                answerIds.push(answer.id);
+
             });
         },
         nextQuestion: function () {
+            console.info("trigger", "nextquestion");
             var questions = this._model.questions;
             if (questions.length === 0) {
                 return;
@@ -106,6 +157,7 @@
             this.displayQuestion(questions[offset].id);
         },
         previousQuestion: function () {
+            console.info("trigger", "previousquestion");
             var questions = this._model.questions;
             if (questions.length === 0) {
                 return;
@@ -143,4 +195,4 @@
 
     window.App = App;
 
-})(window, window.jQuery, window.console);
+})(window, window.jQuery, window.console, window._);

@@ -6,10 +6,14 @@
         this.pointScale = pointScale;
         this.answers = [];
         this.isAnswered = false;
-        this.wasCorrect = null;
+        this.correctAnswerId = null;
+        this.answerId = null;
     }
 
     Question.prototype = {
+        isCorrect: function() {
+            return this.isAnswered && this.correctAnswerId === this.answerId;
+        }
     };
 
     window.Question = Question;
