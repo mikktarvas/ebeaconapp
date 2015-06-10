@@ -20,7 +20,7 @@
 		echo json_encode($new_entry);
 		
 		require_once("close_connection.php");
-
-		session_destroy();
 	}
+	
+	session_destroy();
 ?>
