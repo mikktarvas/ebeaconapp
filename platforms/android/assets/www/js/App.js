@@ -1,6 +1,8 @@
 (function (window, $, console, _) {
     "use strict";
 
+    var ANIMATION_END = "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend";
+
     function App() {
 
         this._beaconService = new BeaconService();
@@ -34,9 +36,29 @@
             $(document).on("click", "#rightarrow", this.nextQuestion.bind(this));
             $(document).on("click", "#submit-score", this._tapSubmitScore.bind(this));
             $(document).on("click", "#finish", this._tapFinish.bind(this));
+            $(document).on("click", "#close-leaderboard", this._closeLeaderBoard.bind(this));
+            $(document).on("click", "#start-game", this._startGame.bind(this));
             $("html").on("swipeleft", this.nextQuestion.bind(this));
             $("html").on("swiperight", this.previousQuestion.bind(this));
 
+        },
+        _startNewGame: function () {
+            this._model.clear();
+            this._foundBeacons = {};
+        },
+        _startGame: function () {
+            var that = this;
+            this._api.startGame(function () {
+                $('#endgame-modal').modal("hide");
+                that._startNewGame();
+            });
+        },
+        _closeLeaderBoard: function () {
+            var that = this;
+            this._api.startGame(function () {
+                $("#leaderboard-modal").modal("hide");
+                that._startNewGame();
+            });
         },
         _tapFinish: function () {
             $('#endgame-modal').modal("show");
@@ -69,6 +91,10 @@
                     });
                 });
             }
+
+        },
+        _animateContainer: function () {
+
 
         },
         _scoreChanged: function (newScore) {
@@ -195,6 +221,15 @@
                 offset = 0;
             }
             this.displayQuestion(questions[offset].id);
+
+            var $e = $("#main");
+            $e.removeClass("animated slideOutLeft").addClass("animated slideOutLeft").one(ANIMATION_END, function () {
+                $e.removeClass("animated slideOutLeft");
+                $e.removeClass("animated slideInRight").addClass("animated slideInRight").one(ANIMATION_END, function () {
+                    $e.removeClass("animated slideInRight");
+                });
+            });
+
         },
         previousQuestion: function () {
             console.info("trigger", "previousquestion");
@@ -207,6 +242,14 @@
                 offset = questions.length - 1;
             }
             this.displayQuestion(questions[offset].id);
+
+            var $e = $("#main");
+            $e.removeClass("animated slideOutRight").addClass("animated slideOutRight").one(ANIMATION_END, function () {
+                $e.removeClass("animated slideOutRight");
+                $e.removeClass("animated slideInLeft").addClass("animated slideInLeft").one(ANIMATION_END, function () {
+                    $e.removeClass("animated slideInLeft");
+                });
+            });
         }
     };
 

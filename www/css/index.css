@@ -27,13 +27,13 @@ body {
 }
 
 #rightarrow, #leftarrow{
-	font-size: 50px;
+    font-size: 50px;
 }
 
 
 body{
     text-align: justify;
-background: url("beacon5.png") no-repeat; 
+    background: url("beacon5.png") no-repeat; 
     background-attachment: scroll;
     background-position-x: center;
     background-position-y: top;
@@ -55,8 +55,8 @@ section{
 }
 
 h2{
-    margin-top: 20px;
-    margin-bottom: 100px;
+    margin-top: 0px;
+    margin-bottom: 50px;
 }
 
 #button h2 {
@@ -64,6 +64,11 @@ h2{
     margin: 0;
     font-size: 16px;
     font-weight: 400;
+}
+
+#main {
+    -webkit-animation-duration: .15s;
+    animation-duration: .15s;
 }
 
 

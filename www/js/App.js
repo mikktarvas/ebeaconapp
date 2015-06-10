@@ -1,6 +1,8 @@
 (function (window, $, console, _) {
     "use strict";
 
+    var ANIMATION_END = "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend";
+
     function App() {
 
         this._beaconService = new BeaconService();
@@ -54,7 +56,7 @@
         _closeLeaderBoard: function () {
             var that = this;
             this._api.startGame(function () {
-                $("#leaderboard-modal").modal("show");
+                $("#leaderboard-modal").modal("hide");
                 that._startNewGame();
             });
         },
@@ -89,6 +91,10 @@
                     });
                 });
             }
+
+        },
+        _animateContainer: function () {
+
 
         },
         _scoreChanged: function (newScore) {
@@ -215,6 +221,15 @@
                 offset = 0;
             }
             this.displayQuestion(questions[offset].id);
+
+            var $e = $("#main");
+            $e.removeClass("animated slideOutLeft").addClass("animated slideOutLeft").one(ANIMATION_END, function () {
+                $e.removeClass("animated slideOutLeft");
+                $e.removeClass("animated slideInRight").addClass("animated slideInRight").one(ANIMATION_END, function () {
+                    $e.removeClass("animated slideInRight");
+                });
+            });
+
         },
         previousQuestion: function () {
             console.info("trigger", "previousquestion");
@@ -227,6 +242,14 @@
                 offset = questions.length - 1;
             }
             this.displayQuestion(questions[offset].id);
+
+            var $e = $("#main");
+            $e.removeClass("animated slideOutRight").addClass("animated slideOutRight").one(ANIMATION_END, function () {
+                $e.removeClass("animated slideOutRight");
+                $e.removeClass("animated slideInLeft").addClass("animated slideInLeft").one(ANIMATION_END, function () {
+                    $e.removeClass("animated slideInLeft");
+                });
+            });
         }
     };
 
