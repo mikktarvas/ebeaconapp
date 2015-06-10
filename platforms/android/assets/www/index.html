@@ -5,6 +5,7 @@
         <meta name="format-detection" content="telephone=no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" type="text/css" href="lib/animate.css/animate.css" />
         <link rel="stylesheet" type="text/css" href="css/cordova.css" />
         <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css" />
         <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap-theme.css" />
@@ -25,7 +26,6 @@
 
             </div>
 
-
             <div id="page">
 
             </div>
@@ -39,13 +39,48 @@
 
         </section>
 
-
         <section id="question_and_answer">
-
             <h2 id="question"></h2>
             <span id="answers"></span>
-            <a class="btn btn-info btn-raised">Finish<div class="ripple-wrapper"></div></a>
+            <a class="btn btn-primary" id="finish">Finish</a>
         </section>	
+
+        <div class="modal fade" id="endgame-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                        <h4 class="modal-title" id="myModalLabel">End game</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" id="score-form">
+
+                            <p class="bg-danger error" style="padding: 1em;">Please fill required fields</p>
+
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputEmail3" placeholder="" name="name">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-2 control-label">Profession</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputPassword3" placeholder="" name="profession">
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="text-align: center;">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="start-game">Start a new game</button>
+                        <button type="button" class="btn btn-primary" id="submit-score">Submit score</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!--   Loading screen -->
         <div id="loading-screen-wrapper">

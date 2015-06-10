@@ -30,8 +30,34 @@
             this._model.on("question:added", this._questionAdded.bind(this));
             this._model.on("score:changed", this._scoreChanged.bind(this));
             this._model.on("current_id:changed", this._currentIdChanged.bind(this));
-            $(document).on("tap", "#leftarrow", this.previousQuestion.bind(this));
-            $(document).on("tap", "#rightarrow", this.nextQuestion.bind(this));
+            $(document).on("click", "#leftarrow", this.previousQuestion.bind(this));
+            $(document).on("click", "#rightarrow", this.nextQuestion.bind(this));
+            $(document).on("click", "#submit-score", this._tapSubmitScore.bind(this));
+            $(document).on("click", "#finish", this._tapFinish.bind(this));
+            $("html").on("swipeleft", this.nextQuestion.bind(this));
+            $("html").on("swiperight", this.previousQuestion.bind(this));
+
+        },
+        _tapFinish: function () {
+            $('#endgame-modal').modal("show");
+            $('#endgame-modal .error').hide();
+            $('#endgame-modal input').val("");
+        },
+        _tapSubmitScore: function () {
+
+            var $form = $("#score-form");
+            var data = {};
+            $form.serializeArray().forEach(function (e) {
+                data[e.name] = e.value.trim();
+            });
+            var formIncomplete = data.name === "" || data.profession === "";
+            if (formIncomplete) {
+                var $e = $("#endgame-modal");
+                $("#endgame-modal .error").show();
+                $e.removeClass("animated bounce").addClass("animated bounce").one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
+                    $e.removeClass("animated bounce");
+                });
+            }
 
         },
         _scoreChanged: function (newScore) {
@@ -60,8 +86,10 @@
             var id = beacon.getUniqueId();
             console.info("found unique beacon", beacon, "id", id);
             this._foundBeacons[id] = beacon;
-            this._api.getQuestion(id, function (question) {
-                that._model.addQuestion(question);
+            this._api.getQuestions(id, function (questions) {
+                questions.forEach(function (question) {
+                    that._model.addQuestion(question);
+                });
             });
 
         },
@@ -120,7 +148,7 @@
                         .appendTo($answers);
 
                 if (!question.isAnswered) {
-                    $button.on("tap", function () {
+                    $button.on("click", function () {
                         question.isAnswered = true;
                         question.answerId = answer.id;
                         $("#answers button").prop("disabled", true);
@@ -130,6 +158,7 @@
                         });
                     });
                 } else {
+
                     var correct = question.isCorrect();
                     if (correct && answer.id === question.answerId) {
                         $button.addClass("green-border");

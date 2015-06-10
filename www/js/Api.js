@@ -11,7 +11,7 @@
         _defaultErrorHandler: function () {
             console.error(arguments);
         },
-        getQuestion: function (deviceId, clbk) {
+        getQuestions: function (deviceId, clbk) {
             $.ajax({
                 url: API_HOST + "get_question.php",
                 dataType: "json",
@@ -20,16 +20,22 @@
                     uuid_ma_mi: deviceId
                 },
                 success: function (response) {
-                    var question = new Question(
-                            response.question.id,
-                            response.question.text,
-                            response.question.point_scale
-                            );
-                    var answers = response.answers.map(function (e) {
-                        return new Answer(e.id, e.text);
+
+                    var questions = [];
+
+                    response.forEach(function (q) {
+                        var question = new Question(q.id, q.text, q.point_scale);
+                        var answers = q.answers.map(function (e) {
+                            return new Answer(e.id, e.text);
+                        });
+                        question.answers = answers;
+                        questions.push(question);
                     });
-                    question.answers = answers;
-                    clbk(question);
+
+                    console.log(questions);
+
+                    clbk(questions);
+
                 },
                 error: this._defaultErrorHandler.bind(this)
             });
@@ -64,6 +70,7 @@
             });
         },
         endGame: function (name, profession, clbk) {
+            //name, profession
             $.ajax({
                 url: API_HOST + "endgame.php",
                 contentType: "application/json",
