@@ -116,6 +116,7 @@
             var total = this._model.questions.length;
             var placheholder = offset + "/" + total;
             $("#page").html(placheholder);
+            $("#unaswered").html(this._model.getUnansweredCount());
         },
         _foundUniqueBeacon: function (beacon) {
 
@@ -136,6 +137,7 @@
                 this.displayQuestion(question.id);
             }
             this._updateMarker();
+            
         },
         _answerQuestion: function (questionId, answerId, answerIds, clbk) {
 
