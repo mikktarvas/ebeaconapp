@@ -44,7 +44,6 @@
 		57566282251541CF9C861178 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6BB255939494FAFBCB52BF2 /* CoreBluetooth.framework */; };
 		8128BA8DDECE47158F9B0E80 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEFA7CE4EFC4AECAB7E2BAA /* CoreLocation.framework */; };
 		F84A2D65064845769A123E7D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226B46211DD4F27969D47D2 /* SystemConfiguration.framework */; };
-		9BF52D6321234328B685D43F /* APPHiddenStatusbarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = AF67A579B8EF49458ADB0311 /* APPHiddenStatusbarOverlay.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,8 +139,6 @@
 		F6BB255939494FAFBCB52BF2 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CoreBluetooth.framework"; path = "System/Library/Frameworks/CoreBluetooth.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 		4DEFA7CE4EFC4AECAB7E2BAA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CoreLocation.framework"; path = "System/Library/Frameworks/CoreLocation.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 		4226B46211DD4F27969D47D2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "SystemConfiguration.framework"; path = "System/Library/Frameworks/SystemConfiguration.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
-		AF67A579B8EF49458ADB0311 /* APPHiddenStatusbarOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "APPHiddenStatusbarOverlay.m"; path = "de.appplant.cordova.plugin.hidden-statusbar-overlay/APPHiddenStatusbarOverlay.m"; sourceTree = "<group>"; fileEncoding = 4; };
-		C4339FBAFAC6433186FBE50B /* APPHiddenStatusbarOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "APPHiddenStatusbarOverlay.h"; path = "de.appplant.cordova.plugin.hidden-statusbar-overlay/APPHiddenStatusbarOverlay.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,8 +271,6 @@
 				6A02B162F6A14DEE97455909 /* ESTTrigger.h */,
 				A75B76DFCDF4440CA40A18B3 /* ESTTriggerManager.h */,
 				014F1DCF336647A5B2D8FC29 /* EstimoteBeacons.h */,
-				AF67A579B8EF49458ADB0311 /* APPHiddenStatusbarOverlay.m */,
-				C4339FBAFAC6433186FBE50B /* APPHiddenStatusbarOverlay.h */,
 			);
 			name = Plugins;
 			path = "eBeaconsApp/Plugins";
@@ -461,7 +456,6 @@
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				E18699873A85483F904B995C /* EstimoteBeacons.m in Sources */,
-				9BF52D6321234328B685D43F /* APPHiddenStatusbarOverlay.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

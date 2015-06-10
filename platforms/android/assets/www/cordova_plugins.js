@@ -11,8 +11,7 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "pl.makingwaves.estimotebeacons": "0.7.1",
-    "de.appplant.cordova.plugin.hidden-statusbar-overlay": "1.2.0"
+    "pl.makingwaves.estimotebeacons": "0.7.1"
 }
 // BOTTOM OF METADATA
 });

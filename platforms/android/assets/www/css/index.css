@@ -26,22 +26,37 @@ body {
     text-align: center;
 }
 
+
+
 body{
     text-align: justify;
-    background:url("estimote.jpg");
-    background-size:500%;
+    background: url("beacon5.png") no-repeat; 
+    background-attachment: scroll;
+    background-position-x: center;
+    background-position-y: top;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
 }
 section{
     background-color:rgba(255,255,255, 0.6);
-    margin-top: 50px;
-    margin-left: 50px;
-    margin-right: 50px;
+    margin-top: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
     text-align: center;
     padding:10px;
     padding-bottom: 30px;
     border: 5px solid white;
-    border-radius:30px;
 }
+
+#page_and_switch{
+    margin-top: 50px
+}
+
+
+
 
 h2{
     margin-top: 20px;

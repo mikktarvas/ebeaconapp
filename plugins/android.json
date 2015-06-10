@@ -37,21 +37,13 @@
             },
             "config.xml": {
                 "parents": {
-                    "/*": [
-                        {
-                            "xml": "<preference name=\"Fullscreen\" value=\"true\" />",
-                            "count": 1
-                        }
-                    ]
+                    "/*": []
                 }
             }
         }
     },
     "installed_plugins": {
         "pl.makingwaves.estimotebeacons": {
-            "PACKAGE_NAME": "ee.tlu.ebeaconsapp"
-        },
-        "de.appplant.cordova.plugin.hidden-statusbar-overlay": {
             "PACKAGE_NAME": "ee.tlu.ebeaconsapp"
         }
     },

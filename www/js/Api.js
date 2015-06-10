@@ -25,6 +25,7 @@
 
                     response.forEach(function (q) {
                         var question = new Question(q.id, q.text, q.point_scale);
+                        console.log(q.answers);
                         var answers = q.answers.map(function (e) {
                             return new Answer(e.id, e.text);
                         });
