@@ -46,16 +46,16 @@
         },
         _onBackButton: function (e) {
             e.preventDefault();
-            navigator.notification.confirm(
-                    "Are you sure you want to exit app? All progress will be lost.",
-                    function (r) {
-                        if (r == 1) {
-                            console.log("BACKBUTTON", r);
-                            window.navigator.app.exitApp();
-                        }
-                    },
-                    "Exit application"
-                    );
+            /*navigator.notification.confirm(
+             "Are you sure you want to exit app? All progress will be lost.",
+             function (r) {
+             if (r == 1) {
+             console.log("BACKBUTTON", r);
+             window.navigator.app.exitApp();
+             }
+             },
+             "Exit application"
+             );*/
         },
         _startNewGame: function () {
             this._model.clear();
