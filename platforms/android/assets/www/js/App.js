@@ -44,12 +44,14 @@
             $("html").on("swiperight", this.previousQuestion.bind(this));
 
         },
-        _onBackButton: function () {
+        _onBackButton: function (e) {
+            e.preventDefault();
             navigator.notification.confirm(
                     "Are you sure you want to exit app? All progress will be lost.",
                     function (r) {
                         if (r == 1) {
-                            navigator.app.exitApp();
+                            console.log("BACKBUTTON", r);
+                            window.navigator.app.exitApp();
                         }
                     },
                     "Exit application"
