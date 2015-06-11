@@ -17,10 +17,25 @@
 		$new_entry->profession = $profession;
 		$new_entry->score = $points;
 		
-		echo json_encode($new_entry);
+		// Get leaderboard and display as JSON
+		$top10 = array();
+		$stmt = $mysqli->prepare("SELECT id, name, score FROM leader_board ORDER BY score DESC LIMIT 10");
+		$stmt->bind_result($id, $name, $score);
+		$stmt->execute();
+		while($stmt->fetch()){
+			$entry = new StdClass();
+			$entry->id = $id;
+			$entry->name = $name;
+			$entry->score = $score;
+			array_push($top10, $entry);
+		}
+		
+		echo json_encode($top10);
 		
 		require_once("close_connection.php");
 	}
-	
+
+	$_SESSION = array();	
 	session_destroy();
+	
 ?>
