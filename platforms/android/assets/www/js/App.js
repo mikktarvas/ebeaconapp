@@ -18,7 +18,7 @@
             console.info("application run");
             this._registerListeners();
             this._scoreChanged(0);
-
+            this._checkQuestionFound();
             this._api.startGame(function () {
                 setTimeout(function () {
                     $("#loading-screen-wrapper").hide();
@@ -45,6 +45,7 @@
         _startNewGame: function () {
             this._model.clear();
             this._foundBeacons = {};
+            this._checkQuestionFound();
         },
         _startGame: function () {
             var that = this;
@@ -93,10 +94,6 @@
             }
 
         },
-        _animateContainer: function () {
-
-
-        },
         _scoreChanged: function (newScore) {
             $("#score").html(newScore);
         },
@@ -131,13 +128,28 @@
             });
 
         },
+        _checkQuestionFound: function () {
+
+            var hasQuestions = this._model.questions.length !== 0;
+
+            if (hasQuestions) {
+                $("#main").show();
+                $("#bt-notice").hide();
+            } else {
+                $("#main").hide();
+                $("#bt-notice").show();
+            }
+
+        },
         _questionAdded: function (question) {
+
+            this._checkQuestionFound();
 
             if (this._model._currentId === null) {
                 this.displayQuestion(question.id);
             }
             this._updateMarker();
-            
+
         },
         _answerQuestion: function (questionId, answerId, answerIds, clbk) {
 
@@ -214,19 +226,22 @@
         },
         nextQuestion: function () {
             console.info("trigger", "nextquestion");
-            var questions = this._model.questions;
-            if (questions.length === 0) {
-                return;
-            }
-            var offset = this._model.getCurrentQuestionOffset() + 1;
-            if (offset >= questions.length) {
-                offset = 0;
-            }
-            this.displayQuestion(questions[offset].id);
+            var that = this;
 
             var $e = $("#main");
             $e.removeClass("animated slideOutLeft").addClass("animated slideOutLeft").one(ANIMATION_END, function () {
                 $e.removeClass("animated slideOutLeft");
+
+                var questions = that._model.questions;
+                if (questions.length === 0) {
+                    return;
+                }
+                var offset = that._model.getCurrentQuestionOffset() + 1;
+                if (offset >= questions.length) {
+                    offset = 0;
+                }
+                that.displayQuestion(questions[offset].id);
+
                 $e.removeClass("animated slideInRight").addClass("animated slideInRight").one(ANIMATION_END, function () {
                     $e.removeClass("animated slideInRight");
                 });
@@ -235,19 +250,22 @@
         },
         previousQuestion: function () {
             console.info("trigger", "previousquestion");
-            var questions = this._model.questions;
-            if (questions.length === 0) {
-                return;
-            }
-            var offset = this._model.getCurrentQuestionOffset() - 1;
-            if (offset < 0) {
-                offset = questions.length - 1;
-            }
-            this.displayQuestion(questions[offset].id);
+            var that = this;
 
             var $e = $("#main");
             $e.removeClass("animated slideOutRight").addClass("animated slideOutRight").one(ANIMATION_END, function () {
                 $e.removeClass("animated slideOutRight");
+
+                var questions = that._model.questions;
+                if (questions.length === 0) {
+                    return;
+                }
+                var offset = that._model.getCurrentQuestionOffset() - 1;
+                if (offset < 0) {
+                    offset = questions.length - 1;
+                }
+                that.displayQuestion(questions[offset].id);
+
                 $e.removeClass("animated slideInLeft").addClass("animated slideInLeft").one(ANIMATION_END, function () {
                     $e.removeClass("animated slideInLeft");
                 });

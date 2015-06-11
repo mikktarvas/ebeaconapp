@@ -1,3 +1,8 @@
+* {
+    /*-webkit-transform: translateZ(0);*/
+    /*-webkit-backface-visibility: hidden;*/
+}
+
 body {
     background: #fff;
     -webkit-font-smoothing: antialiased;
@@ -71,11 +76,14 @@ h2{
     margin-top: 40px;
     padding: 1.2em;
 }
+
 #main {
-    -webkit-animation-duration: .15s;
-    animation-duration: .15s;
+    -webkit-animation-duration: .1s;
+    animation-duration: .1s;
     margin-top: 10px;
     margin-bottom: 30px;
+    display: none;
+    -webkit-transform: translateZ(0);
 }
 
 

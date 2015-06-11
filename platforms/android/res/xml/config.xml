@@ -4,13 +4,16 @@
     <feature name="EstimoteBeacons">
         <param name="android-package" value="com.evothings.EstimoteBeacons" />
     </feature>
-    <name>eBeaconsApp</name>
+    <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <name>Museum Race</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        Museum Race Application
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
-    </author>
     <content src="index.html" />
     <access origin="*" />
+    <allow-navigation href="*" />
 </widget>
