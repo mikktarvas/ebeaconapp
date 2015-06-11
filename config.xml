@@ -7,7 +7,19 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="*" />
+    
     <!--<preference name="DisallowOverscroll" value="true"/>
     <preference name="UIWebViewBounce" value="false"/>
     <preference name="Fullscreen" value="true" />-->
+    
+    <!-- Android Icons -->
+    <platform name="android">
+        <icon density="ldpi" src="res/android/mipmap-hdpi/ic_launcher.png" />
+        <icon density="mdpi" src="res/android/mipmap-hdpi/ic_launcher.png" />
+        <icon density="hdpi" src="res/android/mipmap-hdpi/ic_launcher.png" />
+        <icon density="xhdpi" src="res/android/mipmap-xhdpi/ic_launcher.png" />
+        <icon density="xxhdpi" src="res/android/mipmap-xxhdpi/ic_launcher.png" />
+        <icon density="xxxhdpi" src="res/android/mipmap-xxxhdpi/ic_launcher.png" />
+    </platform>
+    
 </widget>

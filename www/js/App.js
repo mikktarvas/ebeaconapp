@@ -16,6 +16,7 @@
         run: function () {
 
             console.info("application run");
+
             this._registerListeners();
             this._scoreChanged(0);
             this._checkQuestionFound();
@@ -28,6 +29,7 @@
         },
         _registerListeners: function () {
 
+            window.document.addEventListener("backbutton", this._onBackButton.bind(this), false);
             this._beaconService.on("beacons:found", this._onBeaconsFound.bind(this));
             this._model.on("question:added", this._questionAdded.bind(this));
             this._model.on("score:changed", this._scoreChanged.bind(this));
@@ -41,6 +43,17 @@
             $("html").on("swipeleft", this.nextQuestion.bind(this));
             $("html").on("swiperight", this.previousQuestion.bind(this));
 
+        },
+        _onBackButton: function () {
+            navigator.notification.confirm(
+                    "Are you sure you want to exit app? All progress will be lost.",
+                    function (r) {
+                        if (r == 1) {
+                            navigator.app.exitApp();
+                        }
+                    },
+                    "Exit application"
+                    );
         },
         _startNewGame: function () {
             this._model.clear();

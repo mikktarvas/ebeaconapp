@@ -26,5 +26,12 @@
             "url": "https://github.com/apache/cordova-plugin-whitelist.git",
             "subdir": "."
         }
+    },
+    "cordova-plugin-dialogs": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/apache/cordova-plugin-dialogs.git",
+            "subdir": "."
+        }
     }
 }
