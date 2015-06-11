@@ -19,7 +19,7 @@
 		
 		// Get leaderboard and display as JSON
 		$top10 = array();
-		$stmt = $mysqli->prepare("SELECT id, name, score FROM leader_board ORDER BY score DESC LIMIT 10");
+		$stmt = $mysqli->prepare("SELECT id, name, score FROM leader_board ORDER BY score DESC LIMIT 5");
 		$stmt->bind_result($id, $name, $score);
 		$stmt->execute();
 		while($stmt->fetch()){
@@ -33,9 +33,12 @@
 		echo json_encode($top10);
 		
 		require_once("close_connection.php");
-	}
 
-	$_SESSION = array();	
-	session_destroy();
+		$_SESSION = array();	
+		session_destroy();
+	} else {
+		http_response_code(400);
+		die("Game not started.");
+	}
 	
 ?>
