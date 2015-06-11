@@ -1,8 +1,3 @@
-* {
-    /*-webkit-transform: translateZ(0);*/
-    /*-webkit-backface-visibility: hidden;*/
-}
-
 body {
     background: #fff;
     -webkit-font-smoothing: antialiased;
@@ -33,7 +28,6 @@ body {
 
 #rightarrow, #leftarrow{
     font-size: 50px;
-    margin-top: -25px;
 }
 
 
@@ -49,6 +43,7 @@ body{
     background-size: cover;
 
 }
+/*
 section{
     background-color:rgba(255,255,255, 0.6);
     margin-top: 20px;
@@ -58,9 +53,9 @@ section{
     padding:10px;
     padding-bottom: 30px;
     border: 5px solid white;
-}
+}*/
 
-h2{
+/*h2{
     margin-top: 30px;
     margin-bottom: 50px;
 }
@@ -70,22 +65,22 @@ h2{
     margin: 0;
     font-size: 16px;
     font-weight: 400;
-}
+}*/
 
+/*
 #finish {
     margin-top: 40px;
     padding: 1.2em;
-}
+}*/
 
 #main {
     -webkit-animation-duration: .1s;
     animation-duration: .1s;
-    margin-top: 10px;
-    margin-bottom: 30px;
+    /*margin-top: 10px;
+    margin-bottom: 30px;*/
     display: none;
     -webkit-transform: translateZ(0);
 }
-
 
 #answers button .fa {
     display: none;

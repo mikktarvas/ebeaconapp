@@ -25,4 +25,6 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="*" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="UIWebViewBounce" value="false" />
 </widget>

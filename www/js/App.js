@@ -9,6 +9,8 @@
         this._api = new Api();
         this._model = new Model();
         this._foundBeacons = {};
+        this._allowSwipe = true;
+
 
     }
 
@@ -66,6 +68,7 @@
             var that = this;
             this._api.startGame(function () {
                 $('#endgame-modal').modal("hide");
+                that._allowSwipe = true;
                 that._startNewGame();
             });
         },
@@ -74,15 +77,17 @@
             this._api.startGame(function () {
                 $("#leaderboard-modal").modal("hide");
                 that._startNewGame();
+                that._allowSwipe = true;
             });
         },
         _tapFinish: function () {
             $('#endgame-modal').modal("show");
+            this._allowSwipe = false;
             $('#endgame-modal .error').hide();
             $('#endgame-modal input').val("");
         },
         _tapSubmitScore: function () {
-
+            var that = this;
             var $form = $("#score-form");
             var data = {};
             $form.serializeArray().forEach(function (e) {
@@ -98,7 +103,9 @@
             } else {
                 this._api.endGame(true, data.name, data.profession, function (leaderboard) {
                     $('#endgame-modal').modal("hide");
+                    that._allowSwipe = true;
                     $("#leaderboard-modal").modal("show");
+                    that._allowSwipe = false;
                     var $lb = $("#leaderboard").empty();
 
                     leaderboard.forEach(function (e) {
@@ -240,6 +247,9 @@
             });
         },
         nextQuestion: function () {
+            if (!this._allowSwipe) {
+                return;
+            }
             console.info("trigger", "nextquestion");
             var that = this;
 
@@ -264,6 +274,9 @@
 
         },
         previousQuestion: function () {
+            if (!this._allowSwipe) {
+                return;
+            }
             console.info("trigger", "previousquestion");
             var that = this;
 

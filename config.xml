@@ -12,6 +12,9 @@
     <preference name="UIWebViewBounce" value="false"/>
     <preference name="Fullscreen" value="true" />-->
     
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="UIWebViewBounce" value="false"/>
+    
     <!-- Android Icons -->
     <platform name="android">
         <icon density="ldpi" src="res/android/mipmap-hdpi/ic_launcher.png" />
