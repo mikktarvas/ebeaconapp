@@ -17,7 +17,9 @@
 		for($i=0; $i<count($answer_texts); $i++){
 			updateAnswer($answer_ids[$i], $answer_texts[$i], $answer_corrects[$i]);
 		}
+		echo "Question_id: $question_id <br>";
 		$device_id = getDeviceIdByQuestionId($question_id);
-		header("Location: edit_question.php?id={$question_id}&device_id={$device_id}");
+		echo $device_id;
+		//header("Location: edit_question.php?id={$question_id}&device_id={$device_id}");
 	}
 ?>

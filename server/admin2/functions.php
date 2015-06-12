@@ -77,7 +77,7 @@
 	function getDeviceIdByQuestionId($question_id){
 		global $mysqli;
 		$stmt = $mysqli->prepare("SELECT device_info_id FROM questions WHERE id=?");
-		$stmt->bind_param("i", $question_id);
+		$stmt->bind_param("i", $quesion_id);
 		$stmt->bind_result($device_id);
 		$stmt->execute();
 		$stmt->fetch();

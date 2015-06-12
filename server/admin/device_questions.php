@@ -21,6 +21,6 @@
 			echo "<div class='question'>{$question->text} | <a href='edit_question.php?id={$question->id}&device_id={$_REQUEST["id"]}'>Edit question</a> | <a href='remove_question.php?id={$question->id}'>Remove question</a></div>";
 		}
 	?>
-	<div id="add_questions"><a href="add_question.php">Add a question</a></div>
+	<div id="add_questions"><a href="add_question.php?device_id=<?php echo $_REQUEST["id"]; ?>">Add a question</a></div>
 </body>
 </html>
