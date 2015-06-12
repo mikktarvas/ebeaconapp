@@ -17,13 +17,14 @@
 	<div id="back"><a href="device_questions.php?id=<?php echo $_REQUEST["device_id"]; ?>">Back</a></div>
 	
 	<?php
-		$question = getQuestionInfo($_REQUEST["id"]);
-		$answers = getAnswers($_REQUEST["id"]);
+		$question_id = $_REQUEST["id"];
+		$question = getQuestionInfo($question_id);
+		$answers = getAnswers($question_id);
 	?>
 	
 	<form action="update_question.php" method="post">
 		Question:<br>
-		<input type="hidden" name="question_id" value="<?php echo $_REQUEST["id"]; ?>">
+		<input type="hidden" name="question_id" value="<?php echo $question_id; ?>">
 		<input type="text" name="question_text" value="<?php echo $question->text;?>"><br>
 		<input type="text" name="points" value="<?php echo $question->points;?>"><br><br>
 		Answers:<br>

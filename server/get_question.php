@@ -6,7 +6,11 @@
 	if(isSet($_REQUEST["uuid_ma_mi"])){
 		require_once("connection.php");
 		
-		if(!in_array($_REQUEST["uuid_ma_mi"], $_SESSION["visited_devices"])){
+		// If questions package is already generated
+		if(isSet($_SESSION[$_REQUEST["uuid_ma_mi"]])){
+			echo json_encode($_SESSION[$_REQUEST["uuid_ma_mi"]]);
+		} else {
+
 			// Device id and name
 			$stmt = $mysqli->prepare("SELECT id, name FROM device_info WHERE UUID=?");
 			$stmt->bind_param("s", $_REQUEST["uuid_ma_mi"]);
@@ -20,6 +24,7 @@
 				die("Device not found.");
 			}
 			
+			// Questions for device
 			$all_questions_for_device = array();
 			$stmt = $mysqli->prepare("SELECT id, question_text, point_scale FROM questions WHERE device_info_id=?");
 			$stmt->bind_param("i", $device_id);
@@ -30,6 +35,7 @@
 				$question->id = $question_id;
 				$question->text = $question_text;
 				$question->point_scale = $point_scale;
+				$question->answer_id = null;
 				array_push($all_questions_for_device, $question);
 			}
 			$stmt->close();
@@ -66,22 +72,16 @@
 				shuffle($all_answers);
 				
 				$question->answers = $all_answers;
+				
 			}
 			
-			// Output JSON
 			shuffle($all_questions_for_device);
-			echo json_encode($all_questions_for_device);
 			
-			// Put device in visited devices
-			$visited_devices = array();
-			$visited_devices = $_SESSION["visited_devices"];
-			array_push($visited_devices, $_REQUEST["uuid_ma_mi"]);
-			$_SESSION["visited_devices"] = $visited_devices;
-		 
-		} else {
-			http_response_code(400);
-			die("Device already used.");
-		}	
+			// Save new question package
+			$_SESSION[$_REQUEST["uuid_ma_mi"]] = $all_questions_for_device;
+			
+			echo json_encode($all_questions_for_device);
+		}
 		
 		require_once("close_connection.php");	
 		
