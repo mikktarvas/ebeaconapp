@@ -178,4 +178,12 @@
 		$stmt->close();	
 	}
 	
+	function updateBeaconNameById($id, $new_name){
+		global $mysqli;
+		$stmt = $mysqli->prepare("UPDATE device_info SET name=? WHERE id=?");
+		$stmt->bind_param("si", $new_name, $id);
+		$stmt->execute();
+		$stmt->close();
+	}
+	
 ?>
