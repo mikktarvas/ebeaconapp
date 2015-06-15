@@ -40,6 +40,7 @@
 	  </div>
 	</nav>
 	<section>
+	<h3>Beacon: <?php echo getBeaconNameById($_REQUEST["id"]); ?></h3>
 	<!-- <div id="back"><a href="main.php">Back</a></div>-->
 		<table class="table table-hover">
 			<?php
@@ -49,8 +50,8 @@
 				}
 			?>
 		</table>
-		<div id="add_questions" ><a href="add_question.php?device_id=<?php echo $_REQUEST["id"]; ?>" class="btn btn-info">Add a question</a></div>
-
+		
+		<div id="add_questions"><a href="main.php" class="btn btn-default">Back</a> <a href="add_question.php?device_id=<?php echo $_REQUEST["id"]; ?>" class="btn btn-info">Add a question</a></div>
 	</section>
 </body>
 </html>

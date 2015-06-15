@@ -34,11 +34,12 @@
 		  </ul>
 		</div>
 	  </div>
-	</nav>
+	</nav>	
 	<section>
 	<?php
 		if(isSet($_REQUEST["id"])){
 			$id = $_REQUEST["id"];
+			echo "<h3>Beacon: " . getBeaconNameById($id) . "</h3>";
 			$question_count = getBeaconQuestionCount($id);
 			if($question_count > 0){
 				echo "<div class='message'>This beacon has questions related to it. Please delete them before removing the device.</div>";
