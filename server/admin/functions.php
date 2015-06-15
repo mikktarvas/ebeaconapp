@@ -102,4 +102,35 @@
 		$stmt->close();
 	}
 	
+	function getBeaconNameById($id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("SELECT name FROM device_info WHERE id=?");
+		$stmt->bind_param("i", $id);
+		$stmt->bind_result($name);
+		$stmt->execute();
+		$stmt->fetch();
+		$stmt->close();
+		
+		return $name;
+	}
+	
+	// Inserts a question and returns it's id
+	function addQuestion($device_info_id, $point_scale, $question_text){
+		global $mysqli;
+		$stmt = $mysqli->prepare("INSERT INTO questions(question_text, point_scale, device_info_id) VALUES(?, ?, ?)");
+		$stmt->bind_param("sii", $question_text, $point_scale, $device_info_id);
+		$stmt->execute();
+		$stmt->close();
+		
+		return $mysqli->insert_id;
+	}
+	
+	function addAnswer($answer_text, $correct, $question_id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("INSERT INTO answers(answer_text, correct, question_id) VALUES(?, ?, ?)");
+		$stmt->bind_param("sii", $answer_text, $correct, $question_id);
+		$stmt->execute();
+		$stmt->close();
+	}
+	
 ?>

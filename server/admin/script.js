@@ -1,10 +1,12 @@
+var answerContainer;
+
 window.onload = function(){
 	var answer_adder = document.getElementById("answer_adder");
 	answer_adder.addEventListener("click", addAnswer);
 }
 
 function addAnswer(){
-	var container = document.getElementById("answer_container");
+	answerContainer = document.getElementById("answer_container");
 	var answerGroup = document.createElement("div");
 	answerGroup.className = "answer";
 	
@@ -31,9 +33,16 @@ function addAnswer(){
 	
 	answerGroup.appendChild(answerBooleanSelect);
 	
-	container.appendChild(answerGroup);
+	var removeLink = document.createElement("a");
+	removeLink.text = "Remove";
+	removeLink.setAttribute("href", "#");
+	removeLink.setAttribute("onclick", "removeAnswer(this)");
+	
+	answerGroup.appendChild(removeLink);
+	
+	answerContainer.appendChild(answerGroup);
 }
 
-function removeAnswer(obj){
-	
+function removeAnswer(caller){
+	answerContainer.removeChild(caller.parentNode);
 }
