@@ -133,4 +133,49 @@
 		$stmt->close();
 	}
 	
+	function addABeacon($name, $uuid_ma_mi){
+		global $mysqli;
+		$stmt = $mysqli->prepare("INSERT INTO device_info(UUID, name) VALUES(?, ?)");
+		$stmt->bind_param("ss", $uuid_ma_mi, $name);
+		$stmt->execute();
+		$stmt->close();
+	}
+	
+	function getBeaconQuestionCount($id){
+		global $mysqli;
+		$count = 0;
+		$stmt = $mysqli->prepare("SELECT COUNT(*) FROM questions WHERE device_info_id=?");
+		$stmt->bind_param("i", $id);
+		$stmt->bind_result($count);
+		$stmt->execute();
+		$stmt->fetch();
+		$stmt->close();
+		
+		return $count;
+	}
+	
+	function removeBeacon($id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("DELETE FROM device_info WHERE id=?");
+		$stmt->bind_param("i", $id);
+		$stmt->execute();
+		$stmt->close();
+	}
+	
+	function deleteAnswersByQuestionId($question_id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("DELETE FROM answers WHERE question_id=?");
+		$stmt->bind_param("i", $question_id);
+		$stmt->execute();
+		$stmt->close();
+	}
+
+	function deleteQuestionById($id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("DELETE FROM questions WHERE id=?");
+		$stmt->bind_param("i", $id);
+		$stmt->execute();
+		$stmt->close();	
+	}
+	
 ?>

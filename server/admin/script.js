@@ -46,3 +46,9 @@ function addAnswer(){
 function removeAnswer(caller){
 	answerContainer.removeChild(caller.parentNode);
 }
+
+function confirmQuestionDeletion(e){
+	if(!confirm('Are you sure?')){
+		e.preventDefault();
+	}
+}
