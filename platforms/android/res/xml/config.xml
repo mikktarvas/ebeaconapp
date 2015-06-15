@@ -12,6 +12,7 @@
     <feature name="Notification">
         <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
     </feature>
+    <preference name="Fullscreen" value="true" />
     <icon density="ldpi" src="res/android/mipmap-hdpi/ic_launcher.png" />
     <icon density="mdpi" src="res/android/mipmap-hdpi/ic_launcher.png" />
     <icon density="hdpi" src="res/android/mipmap-hdpi/ic_launcher.png" />

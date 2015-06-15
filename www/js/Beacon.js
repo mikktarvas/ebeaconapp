@@ -1,26 +1,29 @@
-(function (window) {
+(function (window, _) {
     "use strict";
 
-    function BeaconDevice(
+    function Beacon(
             distance,
             major,
             minor,
-            proximityUUID
+            proximityUUID,
+            original
             ) {
 
         this.distance = distance;
         this.major = major;
         this.minor = minor;
         this.proximityUUID = proximityUUID;
+        this.original = original;
+        this.lastseen = _.now();
 
     }
 
-    BeaconDevice.prototype = {
+    Beacon.prototype = {
         getUniqueId: function () {
             return this.proximityUUID + "_" + (this.major + "") + "_" + (this.minor + "");
         }
     };
 
-    window.BeaconDevice = BeaconDevice;
+    window.Beacon = Beacon;
 
-})(window);
+})(window, window._);

@@ -1,16 +1,16 @@
-(function (window, $, console, _) {
+(function (window, $, console, _, angular, Backbone) {
     "use strict";
 
     var ANIMATION_END = "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend";
 
     function App() {
 
+        _.extend(this, Backbone.Events);
+
         this._beaconService = new BeaconService();
         this._api = new Api();
         this._model = new Model();
-        this._foundBeacons = {};
-        this._allowSwipe = true;
-
+        this._currentAnswerIds = [];
 
     }
 
@@ -18,291 +18,128 @@
         run: function () {
 
             console.info("application run");
-
+            var that = this;
             this._registerListeners();
-            this._scoreChanged(0);
-            this._checkQuestionFound();
-            this._api.startGame(function () {
-                setTimeout(function () {
-                    $("#loading-screen-wrapper").hide();
-                }, 1000);
-            });
+            setTimeout(function () {
+                $("#loading-screen-wrapper").hide();
+                that._startGame();
+            }, 1000);
 
         },
         _registerListeners: function () {
 
-            window.document.addEventListener("backbutton", this._onBackButton.bind(this), false);
-            this._beaconService.on("beacons:found", this._onBeaconsFound.bind(this));
-            this._model.on("question:added", this._questionAdded.bind(this));
-            this._model.on("score:changed", this._scoreChanged.bind(this));
-            this._model.on("current_id:changed", this._currentIdChanged.bind(this));
-            $(document).on("click", "#leftarrow", this.previousQuestion.bind(this));
-            $(document).on("click", "#rightarrow", this.nextQuestion.bind(this));
-            $(document).on("click", "#submit-score", this._tapSubmitScore.bind(this));
-            $(document).on("click", "#finish", this._tapFinish.bind(this));
-            $(document).on("click", "#close-leaderboard", this._closeLeaderBoard.bind(this));
-            $(document).on("click", "#start-game", this._startGame.bind(this));
-            $("html").on("swipeleft", this.nextQuestion.bind(this));
-            $("html").on("swiperight", this.previousQuestion.bind(this));
+            //Model listeners
+            this.listenTo(this._beaconService, "beacon:found", this._beaconFound);
+            this.listenTo(this._beaconService, "beacon:lost", this._beaconLost);
+            this.listenTo(this._model, "question:added", this._questionAdded);
+            this.listenTo(this._model, "question:removed", this._questionRemoved);
+            this.listenTo(this._model, "questions:cleared", this._questionsCleared);
+
+            //DOM listeners
+            $(document).on("submit", "#start-new-game", this._onSubmitNewGame.bind(this));
+            $(document).on("submit", "#question", this._onSubmitQuestion.bind(this));
+            /*$(document).on("singletap", '#question .item', function (e) {
+             e.preventDefault();
+             e.stopPropagation();
+             console.dir(arguments);
+             });*/
 
         },
-        _onBackButton: function (e) {
+        _answerTapped: function (e) {
+            console.log(e);
+        },
+        _onSubmitQuestion: function (e) {
             e.preventDefault();
-            /*navigator.notification.confirm(
-             "Are you sure you want to exit app? All progress will be lost.",
-             function (r) {
-             if (r == 1) {
-             console.log("BACKBUTTON", r);
-             window.navigator.app.exitApp();
-             }
-             },
-             "Exit application"
-             );*/
-        },
-        _startNewGame: function () {
-            this._model.clear();
-            this._foundBeacons = {};
-            this._checkQuestionFound();
-        },
-        _startGame: function () {
-            var that = this;
-            this._api.startGame(function () {
-                $('#endgame-modal').modal("hide");
-                that._allowSwipe = true;
-                that._startNewGame();
-            });
-        },
-        _closeLeaderBoard: function () {
-            var that = this;
-            this._api.startGame(function () {
-                $("#leaderboard-modal").modal("hide");
-                that._startNewGame();
-                that._allowSwipe = true;
-            });
-        },
-        _tapFinish: function () {
-            $('#endgame-modal').modal("show");
-            this._allowSwipe = false;
-            $('#endgame-modal .error').hide();
-            $('#endgame-modal input').val("");
-        },
-        _tapSubmitScore: function () {
-            var that = this;
-            var $form = $("#score-form");
-            var data = {};
-            $form.serializeArray().forEach(function (e) {
-                data[e.name] = e.value.trim();
-            });
-            var formIncomplete = data.name === "" || data.profession === "";
-            if (formIncomplete) {
-                var $e = $("#endgame-modal");
-                $("#endgame-modal .error").show();
-                $e.removeClass("animated bounce").addClass("animated bounce").one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
-                    $e.removeClass("animated bounce");
-                });
-            } else {
-                this._api.endGame(true, data.name, data.profession, function (leaderboard) {
-                    $('#endgame-modal').modal("hide");
-                    that._allowSwipe = true;
-                    $("#leaderboard-modal").modal("show");
-                    that._allowSwipe = false;
-                    var $lb = $("#leaderboard").empty();
-
-                    leaderboard.forEach(function (e) {
-                        var toAppend = '<a class="list-group-item"><h4 class="list-group-item-heading">' + e.name + ': ' + e.score + '</h4></a>';
-                        $lb.append(toAppend);
+            var data = this._getFormData(e.target);
+            this._api.answerQuestion(parseInt(data["current-question-id"]), parseInt(data["current-answer-id"]), this._currentAnswerIds,
+                    function (addedPoints, correctId) {
+                        console.log(arguments);
                     });
-                });
-            }
-
+            //var answerId
         },
-        _scoreChanged: function (newScore) {
-            $("#score").html(newScore);
-        },
-        _onBeaconsFound: function (beacons) {
-            beacons.forEach(function (beacon) {
-                var id = beacon.getUniqueId();
-                if (!this._foundBeacons.hasOwnProperty(id)) {
-                    this._foundUniqueBeacon(beacon);
-                }
-            }, this);
-        },
-        _currentIdChanged: function () {
-            this._updateMarker();
-        },
-        _updateMarker: function () {
-            var offset = this._model.getCurrentQuestionOffset() + 1;
-            var total = this._model.questions.length;
-            var placheholder = offset + "/" + total;
-            $("#page").html(placheholder);
-            $("#unaswered").html(this._model.getUnansweredCount());
-        },
-        _foundUniqueBeacon: function (beacon) {
-
+        _beaconFound: function (beacon) {
             var that = this;
-            var id = beacon.getUniqueId();
-            console.info("found unique beacon", beacon, "id", id);
-            this._foundBeacons[id] = beacon;
-            this._api.getQuestions(id, function (questions) {
+            this._api.getQuestions(beacon, function (questions) {
                 questions.forEach(function (question) {
                     that._model.addQuestion(question);
                 });
             });
+        },
+        _beaconLost: function (beacon) {
 
         },
-        _checkQuestionFound: function () {
-
-            var hasQuestions = this._model.questions.length !== 0;
-
-            if (hasQuestions) {
-                $("#main").show();
-                $("#bt-notice").hide();
-            } else {
-                $("#main").hide();
-                $("#bt-notice").show();
-            }
-
+        _questionsCleared: function () {
+            this._checkHasQuestions();
         },
         _questionAdded: function (question) {
-
-            this._checkQuestionFound();
-
-            if (this._model._currentId === null) {
-                this.displayQuestion(question.id);
+            this._checkHasQuestions();
+            if (this._model.getCurrentQuestion() === null) {
+                this._displayQuestion(question.id);
             }
-            this._updateMarker();
-
         },
-        _answerQuestion: function (questionId, answerId, answerIds, clbk) {
-
-            var that = this;
-
-            this._api.answerQuestion(questionId, answerId, answerIds, function (addedPoints, correctId) {
-
-                var correct = addedPoints !== 0 && answerId === correctId;
-                if (correct) {
-                    that._model.incementScore(addedPoints);
-                }
-
-                (clbk || _.noop)(addedPoints, correctId);
-
-            });
-
-        },
-        displayQuestion: function (questionId) {
-
-            var that = this;
+        _displayQuestion: function (id) {
+            this._model.setCurrentId(id);
+            var question = this._model.getQuestionById(id);
+            $("#question .question-name").html(question.text);
+            $("#current-question-id").val(id);
+            var $answers = $("#question .answers-list").empty();
             var answerIds = [];
-
-            var questions = this._model.questions.filter(function (question) {
-                return question.id === questionId;
-            });
-
-            if (questions.length !== 1) {
-                throw new Error("invalid question id:", questionId);
-            }
-
-            var question = questions[0];
-            this._model.setCurrentId(question.id);
-
-            $("#question").html(question.text);
-            var $answers = $("#answers").empty();
             question.answers.forEach(function (answer) {
-
-                var content = "<i class=\"fa fa-check\"></i>" + answer.text;
-
-                var $button =
-                        $("<button>")
-                        .attr({
-                            class: "btn btn-block btn-lg btn-info answer"
-                        })
-                        .prop("disabled", question.isAnswered)
-                        .html(content)
-                        .appendTo($answers);
-
-                if (!question.isAnswered) {
-                    $button.on("click", function () {
-                        question.isAnswered = true;
-                        question.answerId = answer.id;
-                        $("#answers button").prop("disabled", true);
-                        that._answerQuestion(questionId, answer.id, answerIds, function (addedPoints, correctId) {
-                            question.correctAnswerId = correctId;
-                            that.displayQuestion(questionId);
-                        });
-                    });
-                } else {
-
-                    var correct = question.isCorrect();
-                    if (correct && answer.id === question.answerId) {
-                        $button.addClass("green-border");
-                    } else if (!correct && answer.id === question.answerId) {
-                        $button.addClass("red-border");
-                    } else if (!correct && answer.id === question.correctAnswerId) {
-                        $button.find(".fa").show();
-                    }
-                }
-
+                var $answer = $('<li class="item"><span class="text"></span><i class="fa fa-check current" style="display: none;"></i></li>');
+                $answer.find(".text").html(answer.text);
                 answerIds.push(answer.id);
+                $answer.on("singletap", function () {
+                    $("#question .fa.current").hide();
+                    $("#current-answer-id").val(answer.id);
+                    $answer.find(".fa.current").show();
+                });
+                $answer.appendTo($answers);
+            });
+            this._currentAnswerIds = answerIds;
+
+        },
+        _checkHasQuestions: function () {
+
+            var questionCount = this._model.getQuestionCount();
+            var hasQuestions = questionCount !== 0;
+
+            if (!hasQuestions) {
+                $("#question").hide();
+                $("#beacons-not-found").show();
+            } else {
+                $("#question").show();
+                $("#beacons-not-found").hide();
+            }
+
+        },
+        _getFormData: function (form) {
+            var data = {};
+            $(form).serializeArray().forEach(function (e) {
+                data[e.name] = e.value.trim();
+            });
+            return data;
+        },
+        _onSubmitNewGame: function (e) {
+            e.preventDefault();
+
+            var that = this;
+            var data = this._getFormData(e.target);
+
+            this._api.startGame(data.name, data.profession, function () {
+                $("#start-new-game").hide();
+                that._model.clear();
+                that._beaconService.start();
 
             });
         },
-        nextQuestion: function () {
-            if (!this._allowSwipe) {
-                return;
-            }
-            console.info("trigger", "nextquestion");
-            var that = this;
-
-            var $e = $("#main");
-            $e.removeClass("animated slideOutLeft").addClass("animated slideOutLeft").one(ANIMATION_END, function () {
-                $e.removeClass("animated slideOutLeft");
-
-                var questions = that._model.questions;
-                if (questions.length === 0) {
-                    return;
-                }
-                var offset = that._model.getCurrentQuestionOffset() + 1;
-                if (offset >= questions.length) {
-                    offset = 0;
-                }
-                that.displayQuestion(questions[offset].id);
-
-                $e.removeClass("animated slideInRight").addClass("animated slideInRight").one(ANIMATION_END, function () {
-                    $e.removeClass("animated slideInRight");
-                });
-            });
-
-        },
-        previousQuestion: function () {
-            if (!this._allowSwipe) {
-                return;
-            }
-            console.info("trigger", "previousquestion");
-            var that = this;
-
-            var $e = $("#main");
-            $e.removeClass("animated slideOutRight").addClass("animated slideOutRight").one(ANIMATION_END, function () {
-                $e.removeClass("animated slideOutRight");
-
-                var questions = that._model.questions;
-                if (questions.length === 0) {
-                    return;
-                }
-                var offset = that._model.getCurrentQuestionOffset() - 1;
-                if (offset < 0) {
-                    offset = questions.length - 1;
-                }
-                that.displayQuestion(questions[offset].id);
-
-                $e.removeClass("animated slideInLeft").addClass("animated slideInLeft").one(ANIMATION_END, function () {
-                    $e.removeClass("animated slideInLeft");
-                });
-            });
+        _startGame: function () {
+            $("#start-new-game").show();
         }
     };
 
     var document_ready = new $.Deferred();
     var device_ready = new $.Deferred();
+    var ionic_ready = new $.Deferred();
 
     $(window.document).ready(function () {
         document_ready.resolve();
@@ -316,8 +153,16 @@
         device_ready.resolve();
     }
 
-    $.when(document_ready, device_ready).then(function () {
+    //Use ionic for basic styling, ignore rest of angular
+    angular
+            .module("app", ["ionic"])
+            .run(function ($ionicPlatform) {
+                $ionicPlatform.ready(function () {
+                    ionic_ready.resolve();
+                });
+            });
 
+    $.when(document_ready, device_ready, ionic_ready).then(function () {
         var app = new App();
         app.run();
         window._app = app;
@@ -326,4 +171,4 @@
 
     window.App = App;
 
-})(window, window.jQuery, window.console, window._);
+})(window, window.jQuery, window.console, window._, window.angular, window.Backbone);

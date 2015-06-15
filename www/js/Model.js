@@ -1,54 +1,56 @@
 (function (window, Backbone, _) {
 
     function Model() {
+
         _.extend(this, Backbone.Events);
-        this.questions = [];
+        this.listenTo(this, "all", function () {
+            console.log.apply(console, arguments);
+        });
+
+        this._questions = [];
         this._currentId = null;
         this._score = 0;
+
     }
 
     Model.prototype = {
         clear: function () {
-            this.questions.length = 0;
-            this.setCurrentId(null);
+            this._currentId = null;
             this._score = 0;
-            this.trigger("score:changed", 0);
-            this.trigger("current_id:changed", null);
-        },
-        incementScore: function (toAdd) {
-            this._score += toAdd;
-            this.trigger("score:changed", this._score);
-        },
-        getScore: function () {
-            return this._score;
+            this._questions.length = 0;
+            this.trigger("questions:cleared");
         },
         addQuestion: function (question) {
-            this.questions.push(question);
+            this._questions.push(question);
             this.trigger("question:added", question);
         },
-        getAnsweredCount: function () {
-            return this.questions.filter(function (question) {
-                return question.isAnswered;
-            }).length;
+        getQuestionCount: function () {
+            return this._questions.length;
         },
-        getUnansweredCount: function () {
-            return this.questions.length - this.getAnsweredCount();
-        },
-        setCurrentId: function (id) {
-            this._currentId = id;
-            this.trigger("current_id:changed", id);
-        },
-        getCurrentQuestionOffset: function () {
-            if (this.currentId === null) {
-                return -1;
+        getCurrentQuestion: function () {
+            var that = this;
+            if (this._currentId === null) {
+                return null;
             } else {
-                for (var i = 0; i < this.questions.length; i++) {
-                    if (this._currentId === this.questions[i].id) {
-                        return i;
-                    }
-                }
-                return -1;
+                return this._questions.filter(function (question) {
+                    return question.id === that._currentId;
+                }).pop();
             }
+        },
+        getQuestionById: function (id) {
+            var questions = this._questions.filter(function (question) {
+                return question.id === id;
+            });
+            if (questions.length === 0) {
+                throw new Error("question id " + id + " not found");
+            } else if (questions.length > 1) {
+                throw new Error("multiple questions found for id " + id);
+            } else {
+                return questions.pop();
+            }
+        },
+        setCurrentId: function(id) {
+            this._currentId = id;
         }
     };
 

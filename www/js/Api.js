@@ -11,28 +11,26 @@
         _defaultErrorHandler: function () {
             console.error(arguments);
         },
-        getQuestions: function (deviceId, clbk) {
+        getQuestions: function (beacon, clbk) {
             $.ajax({
                 url: API_HOST + "get_question.php",
                 dataType: "json",
                 method: "POST",
                 data: {
-                    uuid_ma_mi: deviceId
+                    uuid_ma_mi: beacon.getUniqueId()
                 },
                 success: function (response) {
 
                     var questions = [];
 
                     response.forEach(function (q) {
-                        var question = new Question(q.id, q.text, q.point_scale);
+                        var question = new Question(q.id, q.text, q.point_scale, beacon);
                         var answers = q.answers.map(function (e) {
                             return new Answer(e.id, e.text);
                         });
                         question.answers = answers;
                         questions.push(question);
                     });
-
-                    console.log(questions);
 
                     clbk(questions);
 
@@ -56,12 +54,16 @@
                 error: this._defaultErrorHandler.bind(this)
             });
         },
-        startGame: function (clbk) {
+        startGame: function (name, profession, clbk) {
+            //clbk();
             $.ajax({
                 url: API_HOST + "startgame.php",
                 dataType: "json",
                 method: "POST",
-                data: {},
+                data: {
+                    name: name,
+                    profession: profession
+                },
                 success: function () {
                     clbk();
                 },

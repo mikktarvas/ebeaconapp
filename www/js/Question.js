@@ -1,6 +1,6 @@
 (function (window) {
 
-    function Question(id, text, pointScale) {
+    function Question(id, text, pointScale, beacon) {
         this.id = id;
         this.text = text;
         this.pointScale = pointScale;
@@ -8,10 +8,11 @@
         this.isAnswered = false;
         this.correctAnswerId = null;
         this.answerId = null;
+        this.beacon = beacon;
     }
 
     Question.prototype = {
-        isCorrect: function() {
+        isCorrect: function () {
             return this.isAnswered && this.correctAnswerId === this.answerId;
         }
     };
