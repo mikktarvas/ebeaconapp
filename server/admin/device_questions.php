@@ -45,8 +45,16 @@
 		<table class="table table-hover">
 			<?php
 				$questions = getDeviceQuestions($_REQUEST["id"]);
+				// Row numbers
+				$counter = 1;
 				foreach($questions as $question){
-					echo "<div class='question'><tr> <td>{$question->id} </td> <td>{$question->text} </td> <td><a href='edit_question.php?id={$question->id}&device_id={$_REQUEST["id"]}'>Edit question</a> </td> <td><a href='remove_question.php?id={$question->id}' class='delete_confirm'>Remove question</a></td></tr></div>";
+					echo "<div class='question'><tr> 
+						<td>{$counter} </td> 
+						<td>{$question->text} </td> 
+						<td><a href='edit_question.php?id={$question->id}&device_id={$_REQUEST["id"]}'>Edit question</a> </td> 
+						<td><a href='remove_question.php?id={$question->id}' class='delete_confirm'>Remove question</a></td>
+						</tr></div>";
+						$counter++;
 				}
 			?>
 		</table>

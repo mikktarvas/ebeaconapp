@@ -35,7 +35,7 @@
 	  </div>
 	</nav>
 	<section>
-	<h3>Rename: <?php echo getBeaconNameById($_REQUEST["id"]); ?></h3>
+	<h3>Rename beacon: <?php echo getBeaconNameById($_REQUEST["id"]); ?></h3>
 	<form action="update_device.php" method="post">
 		<div class="row">
 		<div class="col-lg-6">

@@ -36,18 +36,21 @@
 	</nav>
 	
 	<section id="main">
+		<h3>Beacons</h3>
 		<!--<div id="logout"><a href="logout.php">Logout</a></div>-->
 		<table class="table table-hover">	
 		<?php
-		// Get all devices and
 		$devices = getAllDevices();
+		// Counter for row numbers
+		$counter = 1;
 		foreach($devices as $device){
 			echo "<div class='device'><tr> 
-					<td>{$device->id}</td>
+					<td>{$counter}</td>
 					<td>{$device->name} ({$device->uuid})</td>
 					<td><a href='device_questions.php?id={$device->id}'>Questions</a></td> 
 					<td><a href='rename_beacon.php?id={$device->id}'>Rename</a></td> 
 					<td><a href='remove_device.php?id={$device->id}'>Remove</a></td></tr></div>";
+					$counter++;
 		}
 		?>
 		</table>	

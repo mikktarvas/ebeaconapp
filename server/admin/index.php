@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Museum Race Login</title>	<script src="jquery-2.1.4.min.js"></script>
+	<title>Museum Race Login</title>
 	<script src="jquery-2.1.4.min.js"></script>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
