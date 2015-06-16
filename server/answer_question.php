@@ -27,9 +27,7 @@
 			$stmt->execute();
 			$stmt->fetch();
 			$stmt->close();
-			if(!array_key_exists("points", $_SESSION)){
-				$_SESSION["points"] = 0;
-			}
+			
 			$_SESSION["points"] += $point_scale;
 			$result->added_points += $point_scale;
 			$result->correct_answer_id = (int) $answer_id;
