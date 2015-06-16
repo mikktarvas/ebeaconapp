@@ -29,6 +29,10 @@
                             return new Answer(e.id, e.text);
                         });
                         question.answers = answers;
+                        question.answerId = q.answer_id;
+                        question.correctAnswerId = q.correct_answer_id;
+                        question.isAnswered = q.answer_id !== null;
+
                         questions.push(question);
                     });
 
@@ -49,7 +53,7 @@
                     answer_ids: answerIds
                 },
                 success: function (response) {
-                    clbk(response.added_points, response.correct_id);
+                    clbk(response.added_points, response.correct_answer_id);
                 },
                 error: this._defaultErrorHandler.bind(this)
             });

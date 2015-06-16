@@ -8,7 +8,7 @@
             console.log.apply(console, arguments);
         });
 
-        this.beaconDistanceRadius = 1;
+        this.beaconDistanceRadius = 3;
         this.beaconTimeout = 5 * 1000;
         this._currentBeacons = [];
         this.isStarted = false;

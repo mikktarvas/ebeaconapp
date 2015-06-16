@@ -13,6 +13,7 @@
         this._currentAnswerIds = [];
         this._currentAnswerId = null;
         this._allowAnswer = false;
+        this._isOutOfRange = false;
 
     }
 
@@ -66,12 +67,28 @@
             this._updateLocation();
         },
         _gotoPrevious: function () {
-            var id = this._model.getPreviousId();
-            this._displayQuestion(id);
+            if (this._model.getTotal() !== 0) {
+                var id;
+                if (this._isOutOfRange) {
+                    this._isOutOfRange = false;
+                    id = this._model._questions[0].id;
+                } else {
+                    id = this._model.getPreviousId();
+                }
+                this._displayQuestion(id);
+            }
         },
         _gotoNext: function () {
-            var id = this._model.getNextId();
-            this._displayQuestion(id);
+            if (this._model.getTotal() !== 0) {
+                var id;
+                if (this._isOutOfRange) {
+                    this._isOutOfRange = false;
+                    id = this._model._questions[0].id;
+                } else {
+                    id = this._model.getNextId();
+                }
+                this._displayQuestion(id);
+            }
         },
         _onSubmitQuestion: function (e) {
             e.preventDefault();
@@ -120,8 +137,15 @@
             this._checkHasQuestions();
             this._updateLocation();
             var shouldBeLocked = question.id === this._model.getCurrentId() && !question.isAnswered;
+            this._isOutOfRange = false;
             if (shouldBeLocked) {
                 $("#missing-error").show();
+                $("#b-answer").prop("disabled", true);
+                $("#location").html("Unavailable");
+                this._isOutOfRange = true;
+            }
+            if (question.id === this._model.getCurrentId()) {
+                $("#location").html("Unavailable");
             }
 
         },
@@ -135,10 +159,17 @@
                 this._displayQuestion(question.id);
             }
             this._updateLocation();
+            if (question.id === this._model.getCurrentId()) {
+                this._displayQuestion(question.id);
+            }
         },
         _displayQuestion: function (id) {
+            if (id === -1 && this._model._questions.length !== 0) {
+                id = this._model._questions[0].id;
+            }
             $("#answer-error, #missing-error").hide();
             $("#question input, #question button").prop("disabled", false);
+            $("#b-answer").prop("disabled", false);
             this._model.setCurrentId(id);
             var question = this._model.getQuestionById(id);
             console.log(question);
