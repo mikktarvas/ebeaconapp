@@ -91,7 +91,7 @@
                 method: "POST",
                 data: data,
                 success: function (response) {
-                    clbk(response);
+                    clbk(response.leaderboard, response.user_info);
                 },
                 error: this._defaultErrorHandler.bind(this)
             });

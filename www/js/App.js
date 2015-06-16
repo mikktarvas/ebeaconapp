@@ -48,7 +48,11 @@
             $(document).on("tap", "#left-arrow", this._gotoPrevious.bind(this));
             $(document).on("tap", "#right-arrow", this._gotoNext.bind(this));
             $(document).on("tap", "#end-game", this._onTapEndgame.bind(this));
+            $(document).on("tap", "#reload", this._reload.bind(this));
 
+        },
+        _reload: function () {
+            window.location.reload();
         },
         _onTapEndgame: function () {
             var that = this;
@@ -59,8 +63,44 @@
             }, "End game");
         },
         _endGame: function () {
-            this._api.endGame(function (board) {
-                console.log(board);
+            $("#end-game").hide();
+            this._beaconService.stop();
+            $("#question, #beacons-not-found, #start-new-game").hide();
+            this._api.endGame(function (board, info) {
+
+                $("#leaderboard").show();
+                var lb = $("#leaderboard .list").empty();
+
+                var i = 1;
+
+                var isInTable = false;
+
+                board.forEach(function (e) {
+                    var $e = $('<li class="item"></li>');
+                    if (i === info.position) {
+                        $e.html(i + ". " + info.name + ": " + info.points);
+                        $e.css({
+                            "font-weight": "bold"
+                        });
+                        isInTable = true;
+                    } else {
+                        $e.html(i + ". " + e.name + ": " + e.score);
+                    }
+                    $e.appendTo(lb);
+                    i++;
+                });
+
+                if (!isInTable) {
+                    $('<li class="item">...</li>').appendTo(lb);
+                    var $e = $('<li class="item"></li>');
+                    $e.html(info.position + ". " + info.name + ": " + info.points);
+                    $e.css({
+                        "font-weight": "bold"
+                    });
+                    $e.appendTo(lb);
+                }
+
+
             });
         },
         _correctChange: function (c) {
