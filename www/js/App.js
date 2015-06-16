@@ -179,6 +179,7 @@
             return true;
         },
         _beaconFound: function (beacon) {
+            $().toastmessage('showSuccessToast', 'found beacon: ' + beacon.original.name);
             var that = this;
             this._api.getQuestions(beacon, function (questions) {
                 questions.forEach(function (question) {
@@ -187,6 +188,7 @@
             });
         },
         _beaconLost: function (beacon) {
+            $().toastmessage('showWarningToast', 'lost beacon: ' + beacon.original.name);
             this._model.removeQuestionsByBeaconUniqueId(beacon.getUniqueId());
         },
         _questionRemoved: function (question) {
