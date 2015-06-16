@@ -9,7 +9,7 @@
         });
 
         this.beaconDistanceRadius = 3;
-        this.beaconTimeout = 10 * 1000;
+        this.beaconTimeout = 15 * 1000;
         this._currentBeacons = [];
         this.isStarted = false;
 
