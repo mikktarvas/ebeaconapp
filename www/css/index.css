@@ -36,5 +36,27 @@ body {
 }
 
 #question .fa.current {
-    float: right;
+    position: absolute;
+    left: 23px;
+    top: 18px;
+}
+
+h1.question-name {
+    margin-top: 0;
+}
+
+#left-arrow, #right-arrow {
+    padding-top: 30px;
+}
+
+#right-arrow {
+    text-align: right;
+}
+
+#left-arrow {
+    text-align: left;
+}
+
+#left-arrow .fa, #right-arrow .fa {
+
 }

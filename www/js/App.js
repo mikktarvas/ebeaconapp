@@ -11,6 +11,8 @@
         this._api = new Api();
         this._model = new Model();
         this._currentAnswerIds = [];
+        this._currentAnswerId = null;
+        this._allowAnswer = false;
 
     }
 
@@ -34,28 +36,73 @@
             this.listenTo(this._model, "question:added", this._questionAdded);
             this.listenTo(this._model, "question:removed", this._questionRemoved);
             this.listenTo(this._model, "questions:cleared", this._questionsCleared);
+            this.listenTo(this._model, "current_id:changed", this._currentIdChanged);
+            this.listenTo(this._model, "score:changed", this._scoreChanged);
+            this.listenTo(this._model, "correct:changed", this._correctChanged);
+            this.listenTo(this._model, "total:changed", this._totalChanged);
 
             //DOM listeners
             $(document).on("submit", "#start-new-game", this._onSubmitNewGame.bind(this));
             $(document).on("submit", "#question", this._onSubmitQuestion.bind(this));
-            /*$(document).on("singletap", '#question .item', function (e) {
-             e.preventDefault();
-             e.stopPropagation();
-             console.dir(arguments);
-             });*/
+            $(document).on("tap", "#left-arrow", this._gotoPrevious.bind(this));
+            $(document).on("tap", "#right-arrow", this._gotoNext.bind(this));
 
         },
-        _answerTapped: function (e) {
-            console.log(e);
+        _correctChange: function (c) {
+            $("#correct").html(c);
+        },
+        _totalChanged: function (t) {
+            $("#answered").html(t);
+        },
+        _scoreChanged: function () {
+            $("#points").html(this._model.getScore());
+        },
+        _updateLocation: function () {
+            var offset = this._model.getCurrentOffset() + 1;
+            var total = this._model.getTotal();
+            $("#location").html(offset + "/" + total);
+        },
+        _currentIdChanged: function () {
+            this._updateLocation();
+        },
+        _gotoPrevious: function () {
+            var id = this._model.getPreviousId();
+            this._displayQuestion(id);
+        },
+        _gotoNext: function () {
+            var id = this._model.getNextId();
+            this._displayQuestion(id);
         },
         _onSubmitQuestion: function (e) {
             e.preventDefault();
+            if (!this._allowAnswer) {
+                this._gotoNext();
+                return true;
+            }
+            var that = this;
             var data = this._getFormData(e.target);
-            this._api.answerQuestion(parseInt(data["current-question-id"]), parseInt(data["current-answer-id"]), this._currentAnswerIds,
+            var answerId = parseInt(data["current-answer-id"]);
+            var questionId = parseInt(data["current-question-id"]);
+            if (isNaN(answerId)) {
+                $("#answer-error").show();
+                return;
+            }
+            $("#question input, #question button").prop("disabled", true);
+            var question = this._model.getQuestionById(questionId);
+            this._api.answerQuestion(questionId, answerId, this._currentAnswerIds,
                     function (addedPoints, correctId) {
-                        console.log(arguments);
+                        question.isCorrect === addedPoints !== 0;
+                        question.isAnswered = true;
+                        question.correctAnswerId = correctId;
+                        question.answerId = answerId;
+                        that._model.incementScore(addedPoints);
+                        that._displayQuestion(questionId);
+                        that._model.incrementTotal(1);
+                        if (question.isCorrect) {
+                            that._model.incrementCorrect(1);
+                        }
                     });
-            //var answerId
+            return true;
         },
         _beaconFound: function (beacon) {
             var that = this;
@@ -66,33 +113,68 @@
             });
         },
         _beaconLost: function (beacon) {
+            this._model.removeQuestionsByBeaconUniqueId(beacon.getUniqueId());
+        },
+        _questionRemoved: function (question) {
+
+            this._checkHasQuestions();
+            this._updateLocation();
+            var shouldBeLocked = question.id === this._model.getCurrentId() && !question.isAnswered;
+            if (shouldBeLocked) {
+                $("#missing-error").show();
+            }
 
         },
         _questionsCleared: function () {
             this._checkHasQuestions();
+            this._updateLocation();
         },
         _questionAdded: function (question) {
             this._checkHasQuestions();
             if (this._model.getCurrentQuestion() === null) {
                 this._displayQuestion(question.id);
             }
+            this._updateLocation();
         },
         _displayQuestion: function (id) {
+            $("#answer-error, #missing-error").hide();
+            $("#question input, #question button").prop("disabled", false);
             this._model.setCurrentId(id);
             var question = this._model.getQuestionById(id);
+            console.log(question);
             $("#question .question-name").html(question.text);
             $("#current-question-id").val(id);
+            $("#current-answer-id").val("");
             var $answers = $("#question .answers-list").empty();
             var answerIds = [];
+            if (question.isAnswered) {
+                $("#b-answer").hide();
+                $("#b-next").show();
+                this._allowAnswer = false;
+            } else {
+                $("#b-answer").show();
+                $("#b-next").hide();
+                this._allowAnswer = true;
+            }
             question.answers.forEach(function (answer) {
                 var $answer = $('<li class="item"><span class="text"></span><i class="fa fa-check current" style="display: none;"></i></li>');
                 $answer.find(".text").html(answer.text);
                 answerIds.push(answer.id);
-                $answer.on("singletap", function () {
-                    $("#question .fa.current").hide();
-                    $("#current-answer-id").val(answer.id);
-                    $answer.find(".fa.current").show();
-                });
+                if (!question.isAnswered) {
+                    $answer.on("tap", function () {
+                        $("#question .fa.current").hide();
+                        $("#current-answer-id").val(answer.id);
+                        $answer.find(".fa.current").show();
+                    });
+                } else if (question.isCorrect() && answer.id === question.correctAnswerId) {
+                    $answer.find(".current").show();
+                    $answer.css({background: "rgba(0, 255, 0, .3)"});
+                } else if (!question.isCorrect() && answer.id === question.answerId) {
+                    $answer.find(".current").show();
+                    $answer.css({background: "rgba(255, 0, 0, .3)"});
+                } else if (!question.isCorrect() && answer.id === question.correctAnswerId) {
+                    $answer.css({background: "rgba(0, 255, 0, .3)"});
+                }
                 $answer.appendTo($answers);
             });
             this._currentAnswerIds = answerIds;

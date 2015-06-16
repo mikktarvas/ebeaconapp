@@ -57,12 +57,56 @@
 
             <form action="#" class="card" id="question">
                 <div class="item item-text-wrap">
-                    <input id="current-answer-id" type="hidden" value="" />
-                    <input id="current-question-id" type="hidden" value="" />
-                    <h1 class="question-name padding">{QUESTION}</h1>
+                    <input id="current-answer-id" type="hidden" value="" name="current-answer-id" />
+                    <input id="current-question-id" type="hidden" value="" name="current-question-id" />
+
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-33">
+                            <h2>
+                                Points <br />
+                                <span id="points"></span>
+                            </h2>
+                        </div>
+                        <div class="col-33">
+                            <h2>
+                                Current <br />
+                                <span id="location"></span>
+                            </h2>
+                        </div>
+                        <div class="col-33">
+                            <h2>
+                                Answered <br />
+                                <span id="answered"></span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col col-10" id="left-arrow">
+                            <i class="fa fa-caret-left fa-4x"></i>
+                        </div>
+                        <div class="col col-80">
+                            <h1 class="question-name padding">{QUESTION}</h1>
+                        </div>
+                        <div class="col col-10" id="right-arrow">
+                            <i class="fa fa-caret-right fa-4x"></i>
+                        </div>
+                    </div>
+
+                    <p style="background: rgba(255, 0, 0, .3);" class="padding" id="answer-error">
+                        No answer selected
+                    </p>
+                    <p style="background: rgba(255, 0, 0, .3);" class="padding" id="missing-error">
+                        The question you are trying to answer is no longer available because you are
+                        out of the beacon range. In order to answer the question, please find  beacon again
+                    </p>
+
                     <div class="list answers-list">{ANSWERS}</div>
-                    <button class="button button-positive button-block" type="submit">
+                    <button class="button button-positive button-block" type="submit" id="b-answer">
                         Answer
+                    </button>
+                    <button class="button button-balanced button-block" type="submit" id="b-next">
+                        Next
                     </button>
                 </div>
             </form>
