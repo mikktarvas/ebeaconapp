@@ -22,9 +22,15 @@
 
         <ion-header-bar class="bar-stable" id="header">
 
-            <h1 class="title">
+            <h1 class="title" style="left: 0px; right: 0px;">
                 Museum Race
             </h1>
+
+            <span>
+                <button class="button button-dark" style="position: absolute; right: 7px; display: none;" id="end-game">
+                    End game
+                </button>
+            </span>
 
         </ion-header-bar>
 
@@ -87,6 +93,7 @@
                         </div>
                         <div class="col col-80">
                             <h1 class="question-name padding">{QUESTION}</h1>
+                            <p id="point-scale" style="font-size: 24px;"></p>
                         </div>
                         <div class="col col-10" id="right-arrow">
                             <i class="fa fa-caret-right fa-4x"></i>

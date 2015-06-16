@@ -74,16 +74,16 @@
                 error: this._defaultErrorHandler.bind(this)
             });
         },
-        endGame: function (submitScore, name, profession, clbk) {
+        endGame: function (/*submitScore, name, profession, */clbk) {
 
             var data = {};
 
-            if (submitScore) {
-                data = {
-                    name: name,
-                    profession: profession
-                };
-            }
+            /*if (submitScore) {
+             data = {
+             name: name,
+             profession: profession
+             };
+             }*/
 
             $.ajax({
                 url: API_HOST + "endgame.php",

@@ -47,7 +47,21 @@
             $(document).on("submit", "#question", this._onSubmitQuestion.bind(this));
             $(document).on("tap", "#left-arrow", this._gotoPrevious.bind(this));
             $(document).on("tap", "#right-arrow", this._gotoNext.bind(this));
+            $(document).on("tap", "#end-game", this._onTapEndgame.bind(this));
 
+        },
+        _onTapEndgame: function () {
+            var that = this;
+            window.navigator.notification.confirm("Are you sure?", function (i) {
+                if (i === 1) {
+                    that._endGame();
+                }
+            }, "End game");
+        },
+        _endGame: function () {
+            this._api.endGame(function (board) {
+                console.log(board);
+            });
         },
         _correctChange: function (c) {
             $("#correct").html(c);
@@ -62,6 +76,9 @@
             var offset = this._model.getCurrentOffset() + 1;
             var total = this._model.getTotal();
             $("#location").html(offset + "/" + total);
+            if (this._isOutOfRange || offset === 0) {
+                $("#location").html("Unavailable");
+            }
         },
         _currentIdChanged: function () {
             this._updateLocation();
@@ -144,9 +161,6 @@
                 $("#location").html("Unavailable");
                 this._isOutOfRange = true;
             }
-            if (question.id === this._model.getCurrentId()) {
-                $("#location").html("Unavailable");
-            }
 
         },
         _questionsCleared: function () {
@@ -172,8 +186,9 @@
             $("#b-answer").prop("disabled", false);
             this._model.setCurrentId(id);
             var question = this._model.getQuestionById(id);
-            console.log(question);
+            var plural = question.pointScale === 1 ? "point" : "points";
             $("#question .question-name").html(question.text);
+            $("#point-scale").html("(" + question.pointScale + " " + plural + ")");
             $("#current-question-id").val(id);
             $("#current-answer-id").val("");
             var $answers = $("#question .answers-list").empty();
@@ -240,6 +255,7 @@
 
             this._api.startGame(data.name, data.profession, function () {
                 $("#start-new-game").hide();
+                $("#end-game").show();
                 that._model.clear();
                 that._beaconService.start();
 
@@ -247,6 +263,7 @@
         },
         _startGame: function () {
             $("#start-new-game").show();
+            $("#end-game").hide();
         }
     };
 
