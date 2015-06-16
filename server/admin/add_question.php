@@ -8,6 +8,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Add question</title>
+	<script src="change_message.js"></script>
 	<script src="answer.js"></script>
 	<script src="jquery-2.1.4.min.js"></script>
 	<!-- Latest compiled and minified CSS -->
@@ -42,31 +43,31 @@
 	<form action="update_question.php" method="post">
 	<div class="row">
 		<div class="col-lg-6">
-		<h4>Question:</h4><br>
-		<input type="hidden" name="add_new_question">
-		<input type="hidden" name="device_id" value="<?php echo $_REQUEST["device_id"]; ?>">
-		<p>Question text: <input class="form-control" type="text" placeholder="Question text" name="question_text"></p><br>
-		<p>Question points: <input class="form-control" type="text" placeholder="Points" name="points"></p><br>
+			<h4>Question:</h4><br>
+			<input type="hidden" name="add_new_question">
+			<input type="hidden" name="device_id" value="<?php echo $_REQUEST["device_id"]; ?>">
+			<p>Question text: <input class="form-control" type="text" placeholder="Question text" name="question_text"></p><br>
+			<p>Question points: <input class="form-control" type="text" placeholder="Points" name="points"></p><br>
 		</div>
-		</div>
-		<h4>Answers:</h4><br>
-		<div class="row">
-		<div id="answer_container">
-				<div class="answer">
-					<div class="col-lg-6">
-						<input type="text" class="form-control" placeholder="Answer text" name="answer_texts[]">
-					</div>
-					<div class="col-lg-2">
-						<select name="answer_corrects[]" class="form-control">
-							<option value="1" selected="selected">True</option>
-							<option value="0">False</option>
-						</select>
-					</div>
+	</div>
+	<h4>Answers:</h4><br>
+	<div id="answer_container">
+			<div class="answer row">
+				<div class="col-lg-6">
+					<input type="text" class="form-control" placeholder="Answer text" name="answer_texts[]">
+				</div>
+				<div class="col-lg-2">
+					<select name="answer_corrects[]" class="form-control">
+						<option value="1" selected="selected">True</option>
+						<option value="0">False</option>
+					</select>
 				</div>
 			</div>
-		</div>
-		<a href="#" id="answer_adder">Add answer</a><br>
-		<div id="back" class="btn btn-default"><a href="device_questions.php?id=<?php echo $_REQUEST["device_id"]; ?>">Back</a></div> <input type="submit" value="Save" class="btn btn-info">
+	</div>
+	<a href="#" id="answer_adder">Add answer</a><br><br>
+	<div id="back" class="btn btn-default"><a href="device_questions.php?id=<?php echo $_REQUEST["device_id"]; ?>">Back</a></div> 
+	<input type="submit" value="Save" class="btn btn-info">
+	<span id="saved_message">Saved.</span>
 		
 	</form>
 	</section>

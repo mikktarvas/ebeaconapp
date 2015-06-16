@@ -1,5 +1,7 @@
 <?php
 	require_once("session_start.php");
+	$_SESSION = array();
+	session_destroy();
 	if(isSet($_REQUEST["name"]) && isSet($_REQUEST["profession"])){
 		$_SESSION["name"] = $_REQUEST["name"];
 		$_SESSION["profession"] = $_REQUEST["profession"]; 

@@ -1,5 +1,7 @@
 <?php
 	require_once("session_start.php");
+	
+	var_dump($_SESSION);
 
 	if(!isSet($_SESSION["points"]) || !isSet($_SESSION["name"]) || !isSet($_SESSION["profession"])){
 		http_response_code(400);

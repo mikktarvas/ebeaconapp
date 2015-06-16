@@ -13,6 +13,8 @@
 	<meta charset="UTF-8">
 	<title>Edit question</title>
 	<script src="jquery-2.1.4.min.js"></script>
+	<script src="change_message.js"></script>
+	<script src="answer.js"></script>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
@@ -56,7 +58,9 @@
 		</div>
 		</div>
 		<h4>Answers:</h4><br>
+		<div id="answer_container">
 		<?php
+			$first_row = true;
 			foreach($answers as $answer){
 					$one_selected = "";
 					$zero_selected = "";
@@ -66,23 +70,42 @@
 						$zero_selected = "selected='selected'";
 					}
 				?>
-				<div class="row">
-				<div class="col-lg-6">
-					<input type="text" name="answer_texts[]" class="form-control" value="<?php echo $answer->text; ?>">
-					<input type="hidden" name="answer_ids[]"  value="<?php echo $answer->id; ?>">
-				</div>
-				<div class="col-lg-2">
-					<select name="answer_corrects[]" class="form-control">
-						<option value="1" <?php echo $one_selected; ?>>True</option>
-						<option value="0" <?php echo $zero_selected; ?>>False</option>
-					</select><br>
-				</div>
+				<div class="answer row">
+					<div class="col-lg-6">
+						<input type="text" name="answer_texts[]" class="form-control" value="<?php echo $answer->text; ?>">
+						<input type="hidden" name="answer_ids[]"  value="<?php echo $answer->id; ?>">
+					</div>
+					<div class="col-lg-2">
+						<select name="answer_corrects[]" class="form-control">
+							<option value="1" <?php echo $one_selected; ?>>True</option>
+							<option value="0" <?php echo $zero_selected; ?>>False</option>
+						</select>
+					</div>
+					<?php
+						// If not first row, add remove link
+						if(!$first_row){
+							?>
+								
+								<div class="col-lg-1">
+									<a href="#" onclick="removeAnswer(this);">Remove</a>
+								</div>
+								
+							<?php
+						}
+					?>
 				</div>
 				
 				<?php
+				$first_row = false;
 			}
 		?>
-		<div id="back"  class="btn btn-default"><a href="device_questions.php?id=<?php echo $_REQUEST["device_id"]; ?>">Back</a></div> <input type="submit" value="Update" class="btn btn-info"> 
+		</div>
+		<a href="#" id="answer_adder">Add answer</a><br><br>
+		<div id="back"  class="btn btn-default">
+			<a href="device_questions.php?id=<?php echo $_REQUEST["device_id"]; ?>">Back</a>
+		</div> 
+			<input type="submit" value="Update" class="btn btn-info"> 
+		<span id="saved_message">Saved.</span>
 	</form>
 	</section>
 </body>

@@ -3,9 +3,17 @@
 	
 	function getUuidByQuestionId($id){
 		global $mysqli;
-		$stmt = $mysqli->prepare("SELECT questions.id, device_info.UUID FROM questions, device_info WHERE questions.id=? AND device_info.id=questions.id");
+		// Device id
+		$stmt = $mysqli->prepare("SELECT device_info_id FROM questions WHERE id=?");
 		$stmt->bind_param("i", $id);
-		$stmt->bind_result($id, $uuid);
+		$stmt->bind_result($device_info_id);
+		$stmt->execute();
+		$stmt->fetch();
+		$stmt->close();
+		
+		$stmt = $mysqli->prepare("SELECT UUID FROM device_info WHERE id=?");
+		$stmt->bind_param("i", $device_info_id);
+		$stmt->bind_result($uuid);
 		$stmt->execute();
 		$stmt->fetch();
 		$stmt->close();

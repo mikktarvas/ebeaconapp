@@ -11,13 +11,18 @@
 		$answer_texts = $_REQUEST["answer_texts"];
 		$answer_corrects = $_REQUEST["answer_corrects"];
 		$answer_ids = $_REQUEST["answer_ids"];
+		
+		// Remove all the existing answers to a question
+		removeQuestionAnswers($question_id);
+		
 		// Updating a question
 		updateQuestion($question_id, $question_text, $points);
 		
 		// Updating all the answers
 		for($i=0; $i<count($answer_texts); $i++){
-			updateAnswer($answer_ids[$i], $answer_texts[$i], $answer_corrects[$i]);
+			addAnswer($answer_texts[$i], $answer_corrects[$i], $question_id);
 		}
+		
 		$device_id = getDeviceIdByQuestionId($question_id);
 		header("Location: edit_question.php?id={$question_id}&device_id={$device_id}");
 	}

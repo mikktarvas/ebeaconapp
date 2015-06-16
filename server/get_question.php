@@ -36,6 +36,7 @@
 				$question->text = $question_text;
 				$question->point_scale = $point_scale;
 				$question->answer_id = null;
+				$question->correct_answer_id = null;
 				array_push($all_questions_for_device, $question);
 			}
 			$stmt->close();

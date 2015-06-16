@@ -59,7 +59,7 @@
 	function getAnswers($question_id){
 		global $mysqli;
 		$answers = array();
-		$stmt = $mysqli->prepare("SELECT id, answer_text, correct FROM answers WHERE question_id=?");
+		$stmt = $mysqli->prepare("SELECT id, answer_text, correct FROM answers WHERE question_id=? ORDER BY id ASC");
 		$stmt->bind_param("i", $question_id);
 		$stmt->bind_result($id, $text, $correct);
 		$stmt->execute();
@@ -182,6 +182,14 @@
 		global $mysqli;
 		$stmt = $mysqli->prepare("UPDATE device_info SET name=? WHERE id=?");
 		$stmt->bind_param("si", $new_name, $id);
+		$stmt->execute();
+		$stmt->close();
+	}
+	
+	function removeQuestionAnswers($id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("DELETE FROM answers WHERE question_id=?");
+		$stmt->bind_param("i", $id);
 		$stmt->execute();
 		$stmt->close();
 	}

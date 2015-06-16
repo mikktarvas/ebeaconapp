@@ -46,7 +46,7 @@
 		foreach($devices as $device){
 			echo "<div class='device'><tr> 
 					<td>{$counter}</td>
-					<td>{$device->name} ({$device->uuid})</td>
+					<td><strong>{$device->name}</strong> ({$device->uuid})</td>
 					<td><a href='device_questions.php?id={$device->id}'>Questions</a></td> 
 					<td><a href='rename_beacon.php?id={$device->id}'>Rename</a></td> 
 					<td><a href='remove_device.php?id={$device->id}'>Remove</a></td></tr></div>";
