@@ -2,6 +2,8 @@
 	require_once("session_start.php");
 	require_once("verified.php");
 	require_once("functions.php");
+	
+	$beacon_name = getBeaconNameById($_REQUEST["id"]);
 ?>
 <!doctype html>
 <html lang="en">
@@ -35,12 +37,12 @@
 	  </div>
 	</nav>
 	<section>
-	<h3>Rename beacon: <?php echo getBeaconNameById($_REQUEST["id"]); ?></h3>
+	<h3>Rename beacon: <?php echo $beacon_name; ?></h3>
 	<form action="update_device.php" method="post">
 		<div class="row">
 		<div class="col-lg-6">
 			<input type="hidden" name="beacon_id" value="<?php echo $_REQUEST["id"]; ?>">
-			<input class="form-control" type="text" name="new_name" placeholder="New name">
+			<input class="form-control" type="text" name="new_name" placeholder="New name" value="<?php echo $beacon_name; ?>">
 			<br>
 			<div id="back" class="btn btn-default"><a href="main.php">Back</a></div> <input type="submit" value="Update" class="btn btn-info">
 		</div>
