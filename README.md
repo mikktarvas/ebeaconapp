@@ -10,8 +10,8 @@ Simple mobile app using Estimote eBeacons & Cordova
 
 ### Building
 
-$ cordova build android|ios
+$ cordova build android
 
 ### Running
 
-$ cordova run android|ios --device --debug
+$ cordova run android --device --debug

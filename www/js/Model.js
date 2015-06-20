@@ -1,3 +1,6 @@
+/*
+ * @author: Mikk Tarvas
+ */
 (function (window, Backbone, _) {
 
     function Model() {
@@ -75,13 +78,13 @@
             if (this._currentId === null) {
                 return null;
             } else {
-                var q= this._questions.filter(function (question) {
+                var q = this._questions.filter(function (question) {
                     return question.id === that._currentId;
-                });                
+                });
                 return q[0];
             }
         },
-        getCurrentId: function() {
+        getCurrentId: function () {
             return this._currentId;
         },
         getScore: function () {

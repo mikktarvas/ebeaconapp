@@ -1,3 +1,6 @@
+/*
+ * @author: Mikk Tarvas
+ */
 (function (window, $, console) {
     "use strict";
 

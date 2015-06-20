@@ -1,3 +1,6 @@
+/*
+ * @author: Mikk Tarvas
+ */
 (function (window) {
 
     function Question(id, text, pointScale, beacon) {

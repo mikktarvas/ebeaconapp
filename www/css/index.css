@@ -30,10 +30,6 @@ body {
     display: none;
 }
 
-/*#question .item-complex .item-content, #question .item-radio .item-content {
-    padding-left: 64px;
-}*/
-
 #content {
     margin-top: 15px;
 }
@@ -65,9 +61,9 @@ h1.question-name {
 }
 
 .button {
-	font-size: 1.4em;
+    font-size: 1.4em;
 }
 
 h1{
-	font-size: 1.8em;
+    font-size: 1.8em;
 }
