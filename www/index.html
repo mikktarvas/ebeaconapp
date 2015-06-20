@@ -2,132 +2,159 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'" />
         <link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css" />
         <link rel="stylesheet" type="text/css" href="lib/animate.css/animate.css" />
-        <link rel="stylesheet" type="text/css" href="css/cordova.css" />
-        <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css" />
-        <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap-theme.css" />
+        <!--<link rel="stylesheet" type="text/css" href="css/cordova.css" />-->
+        <!--<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css" />-->
+        <!--<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap-theme.css" />-->
+        <link rel="stylesheet" type="text/css" href="lib/ionic/release/css/ionic.css" />
+        <link rel="stylesheet" type="text/css" href="lib/jquery.toastmessage/src/main/resources/css/jquery.toastmessage.css" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
         <title>index</title>
     </head>
 
-    <body>
+    <body ng-app="app">
 
-        <div class="container-fluid text-center" id="main">
+    <ion-pane>
 
-            <div class="row">
+        <ion-header-bar class="bar-stable" id="header">
 
-                <div class="col-xs-2 text-left" id="leftarrow">
-                    <i class="fa fa-chevron-left"></i>
+            <h1 class="title" style="left: 0px; right: 0px;">
+                Museum Race
+            </h1>
+
+            <span>
+                <button class="button button-dark" style="position: absolute; right: 7px; display: none;" id="end-game">
+                    End game
+                </button>
+            </span>
+
+        </ion-header-bar>
+
+        <ion-content class="padding" id="content">
+
+            <form class="list" action="#" id="start-new-game">
+
+                <h2 class="title padding">Start a new game</h2>
+
+                <label class="item item-input">
+                    <input type="text" placeholder="Name" name="name">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" placeholder="Profession" name="profession">
+                </label>
+
+                <div class="padding">
+                    <button class="button button-block button-positive">Start</button>
                 </div>
-                <div class="col-xs-8">
-                    <h1 id="page"></h1>
-                    <span id="score"></span> points/<span id="unaswered"></span> unanswered
-                </div>
-                <div class="col-xs-2 text-right" id="rightarrow" >
-                    <i class="fa fa-chevron-right"></i>
-                </div>
 
-            </div>
+            </form>
 
-            <div class="row">
-                <h2 id="question"></h2>
-                <h2>&nbsp;</h2>
-                <span id="answers"></span>
-            </div>
-
-            <div class="row">
-                <span>
-                    <button class="btn btn-warning btn-block" id="finish" style="padding: 1em; margin-top: 2em;">Finish game</button>
-                </span>
-            </div>
-
-        </div>
-
-        <div id="bt-notice" class="row-fluid text-center">
-            <h2>&nbsp;</h2>
-            <h2>No questions found</h2>
-            <h4>Please find a beacon and make sure that bluetooth is enabled</h4>
-        </div>
-
-        <div data-backdrop="static" class="modal fade" id="endgame-modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myModalLabel">End game</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal" id="score-form">
-
-                            <p class="bg-danger error" style="padding: 1em;">Please fill required fields</p>
-
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputEmail3" placeholder="" name="name">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="inputPassword3" class="col-sm-2 control-label">Profession</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputPassword3" placeholder="" name="profession">
-                                </div>
-                            </div>
-
-                        </form>
-                    </div>
-                    <div class="modal-footer" style="text-align: center;">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="start-game">Start a new game</button>
-                        <button type="button" class="btn btn-primary" id="submit-score">Submit score</button>
-                    </div>
+            <div class="card" id="beacons-not-found">
+                <div class="item item-text-wrap">
+                    <h1>No questions found</h1>
+                    <h3>Please find a beacon and make sure that bluetooth is enabled</h3>
                 </div>
             </div>
-        </div>
 
-        <div data-backdrop="static" class="modal fade" id="leaderboard-modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myModalLabel">Leaderboard</h4>
-                    </div>
-                    <div class="modal-body">
+            <form action="#" class="card" id="question">
+                <div class="item item-text-wrap">
+                    <input id="current-answer-id" type="hidden" value="" name="current-answer-id" />
+                    <input id="current-question-id" type="hidden" value="" name="current-question-id" />
 
-                        <div class="list-group" id="leaderboard">
-
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-33">
+                            <h2>
+                                Points <br />
+                                <span id="points"></span>
+                            </h2>
                         </div>
+                        <div class="col-33">
+                            <h2>
+                                Current <br />
+                                <span id="location"></span>
+                            </h2>
+                        </div>
+                        <div class="col-33">
+                            <h2>
+                                Answered <br />
+                                <span id="answered"></span>
+                            </h2>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col col-10" id="left-arrow">
+                            <i class="fa fa-caret-left fa-4x"></i>
+                        </div>
+                        <div class="col col-80">
+                            <h1 class="question-name padding">{QUESTION}</h1>
+                            <p id="point-scale" style="font-size: 24px;"></p>
+                        </div>
+                        <div class="col col-10" id="right-arrow">
+                            <i class="fa fa-caret-right fa-4x"></i>
+                        </div>
                     </div>
-                    <div class="modal-footer" style="text-align: center;">
-                        <button type="button" class="btn btn-primary btn-block" id="close-leaderboard">Close</button>
-                    </div>
+
+                    <p style="background: rgba(255, 0, 0, .3);" class="padding" id="answer-error">
+                        No answer selected
+                    </p>
+                    <p style="background: rgba(255, 0, 0, .3);" class="padding" id="missing-error">
+                        The question you are trying to answer is no longer available because you are
+                        out of the beacon range. In order to answer the question, please find  beacon again
+                    </p>
+
+                    <div class="list answers-list">{ANSWERS}</div>
+                    <button class="button button-positive button-block" type="submit" id="b-answer">
+                        Answer
+                    </button>
+                    <button class="button button-balanced button-block" type="submit" id="b-next">
+                        Next
+                    </button>
+					<div class="col-100"><br>Tallinn University, Institute of Informatics</div>
                 </div>
+            </form>
+
+            <div id="leaderboard" style="display: none;">
+                <ul class="list">
+
+                </ul>
+                <button class="button button-assertive button-block" type="submit" id="reload">
+                    New game
+                </button>
             </div>
+
+        </ion-content>
+
+    </ion-pane>
+
+    <!--   Loading screen -->
+    <div id="loading-screen-wrapper">
+        <div id="loading-screen">
+            Loading
         </div>
+    </div>
 
-        <!--   Loading screen -->
-        <div id="loading-screen-wrapper">
-            <div id="loading-screen">
-                Loading
-            </div>
-        </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="lib/jquery/jquery.js"></script>
+    <script type="text/javascript" src="lib/jquery.toastmessage/src/main/javascript/jquery.toastmessage.js"></script>
+    <script type="text/javascript" src="lib/ionic/release/js/ionic.bundle.js"></script>
+    <script type="text/javascript" src="lib/jquery.mobile-events/src/jquery.mobile-events.js"></script>
+    <script type="text/javascript" src="lib/underscore/underscore.js"></script>
+    <script type="text/javascript" src="lib/backbone/backbone.js"></script>
+    <!--<script type="text/javascript" src="lib/bootstrap/js/bootstrap.js"></script>-->
+    <script type="text/javascript" src="js/Api.js"></script>
+    <script type="text/javascript" src="js/Model.js"></script>
+    <script type="text/javascript" src="js/Answer.js"></script>
+    <script type="text/javascript" src="js/Question.js"></script>
+    <script type="text/javascript" src="js/Beacon.js"></script>
+    <script type="text/javascript" src="js/BeaconsService.js"></script>
+    <script type="text/javascript" src="js/App.js"></script>
 
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="lib/jquery/jquery.js"></script>
-        <script type="text/javascript" src="lib/jquery.mobile-events/src/jquery.mobile-events.js"></script>
-        <script type="text/javascript" src="lib/underscore/underscore.js"></script>
-        <script type="text/javascript" src="lib/backbone/backbone.js"></script>
-        <script type="text/javascript" src="lib/bootstrap/js/bootstrap.js"></script>
-        <script type="text/javascript" src="js/Api.js"></script>
-        <script type="text/javascript" src="js/Model.js"></script>
-        <script type="text/javascript" src="js/Answer.js"></script>
-        <script type="text/javascript" src="js/Question.js"></script>
-        <script type="text/javascript" src="js/BeaconDevice.js"></script>
-        <script type="text/javascript" src="js/BeaconsService.js"></script>
-        <script type="text/javascript" src="js/App.js"></script>
-
-    </body>
+</body>
 </html>
