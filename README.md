@@ -6,7 +6,7 @@ Simple mobile app using Estimote eBeacons & Cordova
 
 ### Requirements
 
-* Properly configured Cordova with JDK
+* Properly configured Cordova with JDK & ANT
 
 ### Building
 
