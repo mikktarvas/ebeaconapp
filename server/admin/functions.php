@@ -1,5 +1,5 @@
 <?php
-	require_once("mysql_config.php");
+	require_once("../mysql_config.php");
 	
 	$mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, DB);
 	
@@ -59,7 +59,7 @@
 	function getAnswers($question_id){
 		global $mysqli;
 		$answers = array();
-		$stmt = $mysqli->prepare("SELECT id, answer_text, correct FROM answers WHERE question_id=?");
+		$stmt = $mysqli->prepare("SELECT id, answer_text, correct FROM answers WHERE question_id=? ORDER BY id ASC");
 		$stmt->bind_param("i", $question_id);
 		$stmt->bind_result($id, $text, $correct);
 		$stmt->execute();
@@ -77,7 +77,7 @@
 	function getDeviceIdByQuestionId($question_id){
 		global $mysqli;
 		$stmt = $mysqli->prepare("SELECT device_info_id FROM questions WHERE id=?");
-		$stmt->bind_param("i", $quesion_id);
+		$stmt->bind_param("i", $question_id);
 		$stmt->bind_result($device_id);
 		$stmt->execute();
 		$stmt->fetch();
@@ -98,6 +98,98 @@
 		global $mysqli;
 		$stmt = $mysqli->prepare("UPDATE answers SET answer_text=?, correct=? WHERE id=?");
 		$stmt->bind_param("sii", $text, $correct, $id);
+		$stmt->execute();
+		$stmt->close();
+	}
+	
+	function getBeaconNameById($id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("SELECT name FROM device_info WHERE id=?");
+		$stmt->bind_param("i", $id);
+		$stmt->bind_result($name);
+		$stmt->execute();
+		$stmt->fetch();
+		$stmt->close();
+		
+		return $name;
+	}
+	
+	// Inserts a question and returns it's id
+	function addQuestion($device_info_id, $point_scale, $question_text){
+		global $mysqli;
+		$stmt = $mysqli->prepare("INSERT INTO questions(question_text, point_scale, device_info_id) VALUES(?, ?, ?)");
+		$stmt->bind_param("sii", $question_text, $point_scale, $device_info_id);
+		$stmt->execute();
+		$stmt->close();
+		
+		return $mysqli->insert_id;
+	}
+	
+	function addAnswer($answer_text, $correct, $question_id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("INSERT INTO answers(answer_text, correct, question_id) VALUES(?, ?, ?)");
+		$stmt->bind_param("sii", $answer_text, $correct, $question_id);
+		$stmt->execute();
+		$stmt->close();
+	}
+	
+	function addABeacon($name, $uuid_ma_mi){
+		global $mysqli;
+		$stmt = $mysqli->prepare("INSERT INTO device_info(UUID, name) VALUES(?, ?)");
+		$stmt->bind_param("ss", $uuid_ma_mi, $name);
+		$stmt->execute();
+		$stmt->close();
+	}
+	
+	function getBeaconQuestionCount($id){
+		global $mysqli;
+		$count = 0;
+		$stmt = $mysqli->prepare("SELECT COUNT(*) FROM questions WHERE device_info_id=?");
+		$stmt->bind_param("i", $id);
+		$stmt->bind_result($count);
+		$stmt->execute();
+		$stmt->fetch();
+		$stmt->close();
+		
+		return $count;
+	}
+	
+	function removeBeacon($id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("DELETE FROM device_info WHERE id=?");
+		$stmt->bind_param("i", $id);
+		$stmt->execute();
+		$stmt->close();
+	}
+	
+	function deleteAnswersByQuestionId($question_id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("DELETE FROM answers WHERE question_id=?");
+		$stmt->bind_param("i", $question_id);
+		$stmt->execute();
+		$stmt->close();
+	}
+
+	function deleteQuestionById($id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("DELETE FROM questions WHERE id=?");
+		$stmt->bind_param("i", $id);
+		$stmt->execute();
+		$stmt->close();	
+	}
+	
+	function updateBeaconNameById($id, $new_name){
+		global $mysqli;
+		$stmt = $mysqli->prepare("UPDATE device_info SET name=? WHERE id=?");
+		$stmt->bind_param("si", $new_name, $id);
+		$stmt->execute();
+		$stmt->close();
+	}
+	
+	function removeQuestionAnswers($id){
+		global $mysqli;
+		$stmt = $mysqli->prepare("DELETE FROM answers WHERE question_id=?");
+		$stmt->bind_param("i", $id);
 		$stmt->execute();
 		$stmt->close();
 	}

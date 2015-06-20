@@ -1,14 +1,12 @@
 <?php
-	
 	require_once("session_start.php");
 	require_once("config.php");
+	require_once("functions.php");
 	
-	if(isSet($_POST["question_id"]) && isSet($_POST["answer_id"]) && isSet($_POST["answer_ids"])){
-		$question_id = $_POST["question_id"];
-		$answer_id = $_POST["answer_id"];
-		$answer_ids = $_POST["answer_ids"];
-		
-		require_once("connection.php");
+	if(isSet($_REQUEST["question_id"]) && isSet($_REQUEST["answer_id"]) && isSet($_REQUEST["answer_ids"])){
+		$question_id = $_REQUEST["question_id"];
+		$answer_id = $_REQUEST["answer_id"];
+		$answer_ids = $_REQUEST["answer_ids"];
 		
 		// Check if correct answer
 		$stmt = $mysqli->prepare("SELECT correct FROM answers WHERE id=?");
@@ -29,9 +27,10 @@
 			$stmt->execute();
 			$stmt->fetch();
 			$stmt->close();
+			
 			$_SESSION["points"] += $point_scale;
 			$result->added_points += $point_scale;
-			$result->correct_id = (int) $answer_id;
+			$result->correct_answer_id = (int) $answer_id;
 			
 		} else {
 			// Build string from ids
@@ -44,9 +43,19 @@
 			$stmt->execute();
 			$stmt->fetch();
 			$stmt->close();
-			$result->correct_id = (int) $correct_id;
+			$result->correct_answer_id = (int) $correct_id;
 		}
 		
+		$uuid_ma_mi = getUuidByQuestionId($question_id);
+		// Find question in package
+		$question_package = $_SESSION[$uuid_ma_mi];
+		foreach($question_package as $question){
+			if($question->id == $question_id){
+				$question->answer_id = (int) $answer_id;
+				$question->correct_answer_id = $result->correct_answer_id;
+			}
+		}
+	
 		// Output results as JSON
 		echo json_encode($result);
 		

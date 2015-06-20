@@ -1,18 +1,14 @@
 <?php
 	require_once("session_start.php");
 	require_once("verified.php");
-	require_once("functions.php");
-	
-	if(!isSet($_REQUEST["id"])){
-		header("Location: main.php");
-	}
+	require_once("functions.php");	
 ?>
+
 <!doctype html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Questions</title>
-	<script src="deleteConfirm.js"></script>
+	<title>Remove beacon</title>
 	<script src="jquery-2.1.4.min.js"></script>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -38,28 +34,22 @@
 		  </ul>
 		</div>
 	  </div>
-	</nav>
+	</nav>	
 	<section>
-	<h3>Beacon: <?php echo getBeaconNameById($_REQUEST["id"]); ?></h3>
-	<!-- <div id="back"><a href="main.php">Back</a></div>-->
-		<table class="table table-hover">
-			<?php
-				$questions = getDeviceQuestions($_REQUEST["id"]);
-				// Row numbers
-				$counter = 1;
-				foreach($questions as $question){
-					echo "<div class='question'><tr> 
-						<td>{$counter} </td> 
-						<td>{$question->text} </td> 
-						<td><a href='edit_question.php?id={$question->id}&device_id={$_REQUEST["id"]}'>Edit question</a> </td> 
-						<td><a href='remove_question.php?id={$question->id}' class='delete_confirm'>Remove question</a></td>
-						</tr></div>";
-						$counter++;
-				}
-			?>
-		</table>
-		
-		<div id="add_questions"><a href="main.php" class="btn btn-default">Back</a> <a href="add_question.php?device_id=<?php echo $_REQUEST["id"]; ?>" class="btn btn-info">Add a question</a></div>
+	<?php
+		if(isSet($_REQUEST["id"])){
+			$id = $_REQUEST["id"];
+			echo "<h3>Beacon: " . getBeaconNameById($id) . "</h3>";
+			$question_count = getBeaconQuestionCount($id);
+			if($question_count > 0){
+				echo "<div class='message'>This beacon has questions related to it. Please delete them before removing the device.</div>";
+			} else {
+				removeBeacon($id);
+				header("Location: main.php");
+			}
+		}
+	?>
+	<div id="back" class="btn btn-default"><a href="main.php">Back</a></div> 
 	</section>
 </body>
 </html>
