@@ -1,3 +1,8 @@
+<?php
+	/*
+	 * @author: Kardo Jõeleht
+	 */
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,11 +22,11 @@
 <body>
 	<div id="login" class="container form-signin">
 		<div class="jumbotron">
-			<h2 class="form-signin-heading" align="center">Log in</h2>
+			<h2 class="form-signin-heading">Log in</h2>
 				<form action="login.php" method="post" >
 					<input type="text" name="username" placeholder="Username" class="form-control" ><br>
 					<input type="password" name="password" placeholder="Password" class="form-control" ><br>
-					<input type="submit" value="Login" button class="btn btn-lg btn-default btn-block">
+					<input type="submit" value="Login" class="btn btn-lg btn-default btn-block">
 				</form>
 		</div>
 	</div>

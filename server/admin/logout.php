@@ -1,4 +1,7 @@
 <?php
+	/*
+	 * @author: Kardo Jõeleht
+	 */
 	require_once("session_start.php");
 	session_destroy();
 	header("Location: index.php");

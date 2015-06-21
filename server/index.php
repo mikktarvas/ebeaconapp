@@ -1,3 +1,8 @@
+<?php
+	/*
+	 * @author: Kardo Jõeleht
+	 */
+?>
 <!doctype html>
 <html lang="en">
 <head>

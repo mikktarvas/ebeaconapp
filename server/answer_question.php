@@ -1,4 +1,8 @@
 <?php
+	/*
+	 * @author: Kardo Jõeleht
+	 */
+
 	require_once("session_start.php");
 	require_once("config.php");
 	require_once("functions.php");

@@ -1,3 +1,7 @@
+/*
+ * @author: Kardo Jõeleht
+ */
+
 var saved_message_container;
 var section_to_listen;
 
