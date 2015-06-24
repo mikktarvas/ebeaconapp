@@ -1,4 +1,7 @@
 <?php
+	/*
+	 * @author: Kardo Jõeleht
+	 */
 	require_once("session_start.php");
 	require_once("verified.php");
 	require_once("functions.php");
@@ -27,7 +30,7 @@
 		</div>
 		<div>
 		  <ul class="nav navbar-nav">
-			<li><a href="main.php">Beacons</a></</li>
+			<li><a href="main.php">Beacons</a></li>
 			<li><a href="add_device.php">Add a device</a></li>
 			<li><a href="logout.php">Logout</a></li>
 		  </ul>
@@ -44,17 +47,17 @@
 		// Counter for row numbers
 		$counter = 1;
 		foreach($devices as $device){
-			echo "<div class='device'><tr> 
+			echo "<tr class='device'> 
 					<td>{$counter}</td>
 					<td><strong>{$device->name}</strong> ({$device->uuid})</td>
 					<td><a href='device_questions.php?id={$device->id}'>Questions</a></td> 
 					<td><a href='rename_beacon.php?id={$device->id}'>Rename</a></td> 
-					<td><a href='remove_device.php?id={$device->id}'>Remove</a></td></tr></div>";
+					<td><a href='remove_device.php?id={$device->id}'>Remove</a></td></tr>";
 					$counter++;
 		}
 		?>
 		</table>	
-		<div id="add_devices"><a href="add_device.php" type="button" class="btn btn-info">Add a device</a></div>
+		<div id="add_devices"><a href="add_device.php" class="btn btn-info">Add a device</a></div>
 	</section>
 </body>
 </html>

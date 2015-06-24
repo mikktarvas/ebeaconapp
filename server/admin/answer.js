@@ -1,3 +1,7 @@
+/*
+ * @author: Kardo Jõeleht
+ */
+
 var answerContainer;
 
 window.addEventListener('load', function(){

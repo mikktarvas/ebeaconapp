@@ -1,4 +1,7 @@
 <?php
+	/*
+	 * @author: Kardo Jõeleht
+	 */
 	require_once("session_start.php");
 	$_SESSION = array();
 	if(isSet($_REQUEST["name"]) && isSet($_REQUEST["profession"])){

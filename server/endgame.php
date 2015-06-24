@@ -1,4 +1,7 @@
 <?php
+	/*
+	 * @author: Kardo Jõeleht
+	 */
 	require_once("session_start.php");
 	
 	if(!isSet($_SESSION["points"]) || !isSet($_SESSION["name"]) || !isSet($_SESSION["profession"])){

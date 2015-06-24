@@ -1,4 +1,7 @@
 <?php
+	/*
+	 * @author: Kardo Jõeleht
+	 */
 	require_once("session_start.php");
 	require_once("verified.php");
 	require_once("functions.php");
@@ -48,12 +51,12 @@
 				// Row numbers
 				$counter = 1;
 				foreach($questions as $question){
-					echo "<div class='question'><tr> 
+					echo "<tr class='question'> 
 						<td>{$counter} </td> 
 						<td>{$question->text} </td> 
-						<td><a href='edit_question.php?id={$question->id}&device_id={$_REQUEST["id"]}'>Edit question</a> </td> 
+						<td><a href='edit_question.php?id={$question->id}&amp;device_id={$_REQUEST["id"]}'>Edit question</a> </td> 
 						<td><a href='remove_question.php?id={$question->id}' class='delete_confirm'>Remove question</a></td>
-						</tr></div>";
+						</tr>";
 						$counter++;
 				}
 			?>

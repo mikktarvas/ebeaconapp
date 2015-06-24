@@ -1,4 +1,7 @@
 <?php
+	/*
+	 * @author: Kardo Jõeleht
+	 */
 	require_once("connection.php");
 	
 	function getUuidByQuestionId($id){
